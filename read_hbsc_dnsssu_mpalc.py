@@ -2,14 +2,16 @@ import pandas as pd
 import numpy as np
 from pandas.api.types import CategoricalDtype
 
-def load_and_preprocess(trend_name=None):
+def load_and_preprocess(trend_name=None, remove_data=None):
 
     data = load(trend_name=trend_name)
-    dataset, attributes, descriptives = define_attributes(data=data)
+    if remove_data:
+        data = remove(data=data)
+    dataset, attributes, descriptives = define_attributes(data=data, remove_data=remove_data)
 
     return dataset, attributes, descriptives
 
-def define_attributes(data=None):
+def define_attributes(data=None, remove_data=None):
 
     time_attribute = ['meting']
     outcome_attribute = ['mpalc']
@@ -18,14 +20,24 @@ def define_attributes(data=None):
     data_sorted['id'] = np.arange(len(data_sorted))
 
     id_attribute = ['id']
-    skip_attributes = []
+    if remove_data:
+        skip_attributes = ['leerjaar']
+    else:
+        skip_attributes = []
 
     dataset = data_sorted.drop(skip_attributes, axis=1)         
 
     num_atts = ['lft', 'cijferleven']
     bin_atts = ['sekse', 'vollgezin']
     nom_atts = ['etngroep3', 'vaderbaan', 'moederbaan']
-    ord_atts = ['schnivo', 'leerjaar', 'stedgem', 'spijbel']
+    if remove_data:
+        ord_atts = ['schnivo', 'stedgem', 'spijbel']
+    else:
+        ord_atts = ['schnivo', 'leerjaar', 'stedgem', 'spijbel']
+
+    #for att in ord_atts:
+    #    print(att)
+    #    print(dataset[att].cat.categories)
 
     descriptives = {'num_atts': num_atts, 'bin_atts': bin_atts, 'nom_atts': nom_atts, 'ord_atts': ord_atts}
 
@@ -33,6 +45,16 @@ def define_attributes(data=None):
                   'id_attribute': id_attribute, 'outcome_attribute': outcome_attribute}
 
     return dataset, attributes, descriptives
+
+def remove(data=None):
+
+    #print(data.shape)
+    #print(len(data[(data['lft'] < 12) | (data['lft'] > 16)]))
+    data = data[(data['lft'] > 11) & (data['lft'] < 17)]
+    #print(data.shape)
+    #print(data.lft.unique())
+
+    return data
 
 def load(trend_name=None):
 

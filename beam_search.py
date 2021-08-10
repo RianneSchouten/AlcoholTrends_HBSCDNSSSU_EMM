@@ -90,7 +90,7 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
                             else:                             
 
                                 desc_qm = qu.add_qm(desc=desc, general_params=general_params, subgroup_params=subgroup_params, 
-                                                model_params=model_params, beam_search_params=beam_search_params) 
+                                                    model_params=model_params, beam_search_params=beam_search_params) 
                                 cq_satisfied.append(desc_qm)                                                               
                     
         considered_subgroups['level_' + str(d_i)] = {'n_consd': n_consd, 'n_sim_descs': n_sim_descs, 
