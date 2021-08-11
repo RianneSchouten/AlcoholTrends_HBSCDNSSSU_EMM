@@ -70,7 +70,7 @@ if __name__ == '__main__':
          constraints = {'min_size': 0.05, 'min_occassions': 1.0},
          dfd_params = {'make': False, 'm': 100},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width
-         date=20210810, 
+         date=20210811, 
          save_location='./data_output/')
 
     '''

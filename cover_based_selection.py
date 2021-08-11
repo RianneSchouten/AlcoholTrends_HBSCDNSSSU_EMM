@@ -54,4 +54,6 @@ def select_using_weighted_coverage(candidates=None, stop_number=None, data_size=
 
         sel = candidates
 
+    #print(sel[0]['description'])
+
     return sel

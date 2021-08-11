@@ -3,6 +3,8 @@ import pandas as pd
 
 def select_subgroup(description=None, df=None, descriptives=None):
 
+    #description_copy = description.copy()
+    #order = description_copy.pop('literal_order')
     pairs = list(description.items())
 
     num_atts = descriptives['num_atts']
@@ -19,7 +21,7 @@ def select_subgroup(description=None, df=None, descriptives=None):
         for pair in pairs:
 
             att = pair[0]
-            sel = pair[1]
+            sel = pair[1]#[0] #sel[1][1] contains the order of the literal
 
             if att in bin_atts:
             

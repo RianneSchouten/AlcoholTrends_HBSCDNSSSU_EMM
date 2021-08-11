@@ -13,9 +13,6 @@ def select_result_set(candidate_result_set=None, beam_search_params=None, wcs_pa
     elif model_params['order'] == 'min':
         reverse = False
 
-    #print(candidate_result_set[0])
-    #print(candidate_result_set[1])
-
     if model_params['qm'] == 'count': result_set_ordered = sorted(candidate_result_set, key=lambda i: (i['qualities']['qm_value'],i['qualities']['sum_qm_value']), reverse=reverse)
     else: result_set_ordered = sorted(candidate_result_set, key = lambda i: i['qualities']['qm_value'], reverse=reverse) 
     
@@ -27,6 +24,8 @@ def select_result_set(candidate_result_set=None, beam_search_params=None, wcs_pa
     return result_set, rs_n_redun_descs
 
 def prepare_result_list(result_set=None):
+
+    print('prepare result list')
 
     if len(result_set) == 0:
         
@@ -50,7 +49,7 @@ def prepare_result_list(result_set=None):
                 new_sg = pd.DataFrame.from_dict(result_set_selected[sg]).T
                 new_sg.drop(columns=['sg_idx'], inplace=True)
                 result_emm = result_emm.append(new_sg)
-            result_emm['sg'] = np.repeat(np.arange(len(result_set_selected)), 2) 
+            result_emm['sg'] = np.repeat(np.arange(len(result_set_selected)), 3) 
             result_emm.sort_index(axis=1, inplace=True)  
 
     return result_emm

@@ -14,7 +14,12 @@ def similar_description(desc=None, cq_satisfied=None):
     # this can happen for numerical and ordinal attributes
     # changes are low that those descriptions will end up in the result list together
     for seed in cq_satisfied:
-        if desc['description'] == seed['description']:
+
+        current = desc['description'].copy()
+        #order = current.pop('literal_order')
+        new = seed['description'].copy()
+        #order_new = new.pop('literal_order')
+        if current == new:
             check_similar_description = False
             break
 

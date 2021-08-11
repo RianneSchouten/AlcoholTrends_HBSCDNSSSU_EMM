@@ -9,12 +9,14 @@ import constraints as cs
 def apply_dominance_pruning(result_set=None, dataset=None, descriptives=None, attributes=None, general_params=None, model_params=None, beam_search_params=None, constraints=None):
 
     print('start pruning')
+
+    current_result_set = result_set.copy()
     pruned_descriptions = get_new_descriptions(result_set=result_set)
     pruned_subgroups, n_small_groups, n_type_small_subgroup, n_type_small_occassions, n_type_no_subgroup, n_connected_occassions = get_new_qualities(pruned_descriptions=pruned_descriptions, \
         dataset=dataset, descriptives=descriptives, attributes=attributes, general_params=general_params, model_params=model_params, beam_search_params=beam_search_params, constraints=constraints)
 
     # append with result_set, to keep the original subgroups as well
-    all_subgroups = [result_set.copy()]
+    all_subgroups = [current_result_set.copy()]
     all_subgroups.append(pruned_subgroups)
     all_subgroups = [item for sublist in all_subgroups for item in sublist]
 
@@ -25,7 +27,7 @@ def get_new_descriptions(result_set=None):
     pruned_descriptions = []
     for existing_subgroup in result_set:
 
-        old_desc = existing_subgroup['description']
+        old_desc = existing_subgroup['description'].copy()
         items_old_desc = old_desc.items()
 
         for r in np.arange(1, len(list(items_old_desc))):

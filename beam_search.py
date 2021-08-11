@@ -12,8 +12,8 @@ import dominance_pruning as dp
 def beam_search(dataset=None, attributes=None, descriptives=None, model_params=None, beam_search_params=None, wcs_params=None, constraints=None):
 
     general_params = qu.calculate_general_parameters(dataset=dataset, attributes=attributes, model_params=model_params, constraints=constraints)
-    print(len(general_params['params']))
-    print(general_params['params'])
+    #print(len(general_params['params']))
+    #print(general_params['params'])
     candidate_queue = rf.create_starting_descriptions(dataset=dataset, descriptives=descriptives, b=beam_search_params['b'])
     #print(candidate_queue)
 
@@ -41,7 +41,8 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
                 seed_set.append(seed)
             else:                
                 subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=seed['description'], df=dataset, descriptives=descriptives)
-                seed_set = rf.refine_seed(seed=seed, subgroup=subgroup, descriptives=descriptives, b=beam_search_params['b'])
+                seed_set = rf.refine_seed(seed=seed, subgroup=subgroup, descriptives=descriptives, 
+                                          b=beam_search_params['b'])
 
             for desc in seed_set:
 
@@ -91,6 +92,7 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
 
                                 desc_qm = qu.add_qm(desc=desc, general_params=general_params, subgroup_params=subgroup_params, 
                                                     model_params=model_params, beam_search_params=beam_search_params) 
+                                #print(desc_qm.keys())
                                 cq_satisfied.append(desc_qm)                                                               
                     
         considered_subgroups['level_' + str(d_i)] = {'n_consd': n_consd, 'n_sim_descs': n_sim_descs, 
