@@ -65,8 +65,9 @@ if __name__ == '__main__':
     # An extra run for decreasing trends
     main(data_name='HBSC_DNSSSU', 
          trend_name='MPALC', remove_data=True,
-         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, # 20 descriptive attributes
-         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 'qm': 'max', 'threshold': None, 'order': 'max'},
+         beam_search_params = {'b': 8, 'w': 40, 'd': 5, 'q': 20}, # 20 descriptive attributes
+         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
          constraints = {'min_size': 0.05, 'min_occassions': 1.0},
          dfd_params = {'make': False, 'm': 100},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width

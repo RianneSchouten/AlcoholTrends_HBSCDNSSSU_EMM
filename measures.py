@@ -31,21 +31,21 @@ def calculate_z_values(general_params=None, subgroup_params=None, model_params=N
 def apply_qm_function(subgroup_params=None, model_params=None):
 
     if model_params['qm'] == 'max':
-        qm_value = np.round(subgroup_params['z'].abs().max(), 2)
+        qm_value = np.round(subgroup_params['z'].abs().max(), model_params['round'])
 
     elif model_params['qm'] == 'min':
-        qm_value = np.round(subgroup_params['z'].abs().min(), 2)
+        qm_value = np.round(subgroup_params['z'].abs().min(), model_params['round'])
 
     elif model_params['qm'] == 'count':
         qm_value = np.sum(subgroup_params['z'].abs() < model_params['threshold'])
-        sum_qm_value = np.round(np.sum(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs()),3)
+        sum_qm_value = np.round(np.sum(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs()), model_params['round'])
         subgroup_params['sum_qm_value'] = sum_qm_value
         
     elif model_params['qm'] == 'average':
-        qm_value = np.round(subgroup_params['z'].abs().mean(), 2)
+        qm_value = np.round(subgroup_params['z'].abs().mean(), model_params['round'])
 
     elif model_params['qm'] == 'sum':
-        qm_value = np.round(subgroup_params['z'].abs().sum(), 2)
+        qm_value = np.round(subgroup_params['z'].abs().sum(), model_params['round'])
 
     subgroup_params['qm_value'] = qm_value    
 

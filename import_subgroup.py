@@ -72,7 +72,7 @@ def load_result_emm(file_name=None):
 
     return result_emm, analysis_info, considered_subgroups, general_params_pd, distribution_params 
 
-print('yesyes')
+#print('yesyes')
 '''
 general_params_pd, all_params = import_subgroup_from_resultlist(data_name="HBSC_DNSSSU",
                                                                 trend_name="MPALC",
