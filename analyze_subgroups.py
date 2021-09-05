@@ -121,7 +121,7 @@ def calculate_jaccard_similarity(js=None):
 
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20210811_None_[8, 40, 3, 20]_[0.05, 1.0]_[False, 100]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]",
+                           file_name = "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]",
                            remove_data = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20})

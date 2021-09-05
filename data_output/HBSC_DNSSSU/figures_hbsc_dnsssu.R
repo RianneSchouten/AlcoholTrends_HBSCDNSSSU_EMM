@@ -27,12 +27,10 @@ source_python("import_subgroup.py")
 # prevalence, max, new figure
 nr_subgroups = 19.0
 subgroup_numbers <- c(0.0:nr_subgroups)
-pal <- c("#636363", gg_color_hue(nr_subgroups+1))
 
 data_name <- 'HBSC_DNSSSU'
 trend_name <- 'MPALC'
-file_name <- "20210810_None_[8, 40, 3, 20]_[0.05, 1.0]_[False, 100]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max']"
-
+file_name <- "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]"
 out <- import_subgroup_from_resultlist(data_name=data_name,
                                        trend_name=trend_name,
                                        file_name=file_name, 
@@ -55,9 +53,11 @@ data <- rbind(all_params_adapted, general_params_adapted) %>%
   mutate(subgroup = reorder(subgroup, sort(as.numeric(subgroup))))
 
 sel <- data[data$subgroup %in% c(1:25,50), ]
-sel <- data[data$subgroup %in% c(7,50), ]
+sel <- data[data$subgroup %in% c(1,5,7,14,19,50), ]
+sel <- data[data$subgroup %in% c(1,5,7,19,50), ]
 pal = c("#fdb462", "#bebada", "#fb8072", "#80b1d3", "#b3de69", "#636363")
-pal <- c(gg_color_hue(nr_subgroups+1), "#636363")
+pal = c("#fdb462", "#bebada", "#fb8072", "#b3de69", "#636363")
+#pal <- c(gg_color_hue(nr_subgroups+1), "#636363")
 trend_plot <- ggplot(sel, aes(x = year, y = prev, color = subgroup)) + 
   geom_point(size=0.8) + 
   geom_line(size=0.7) + 
@@ -66,7 +66,8 @@ trend_plot <- ggplot(sel, aes(x = year, y = prev, color = subgroup)) +
   xlab("") + 
   ylab("") + 
   scale_color_manual(values = pal, 
-                     #labels = c("1", "3", "7", "18", "19", "D"),
+                     #labels = c("1", "5", "7", "14", "19", "D"),
+                     labels = c("1", "2", "3", "4", "D"),
                      name = "") + 
   guides(color = guide_legend(nrow=1, override.aes = list(size = 0.7)),
          shape = guide_legend(override.aes = list(size = 0.7))) + 
@@ -83,4 +84,6 @@ trend_plot <- ggplot(sel, aes(x = year, y = prev, color = subgroup)) +
         plot.margin = unit(x = c(-2, 1, -2, -2), units = "mm"))
 trend_plot
 
+name <- "data_output/HBSC_DNSSSU/MPALC/maxprev.pdf"
+ggsave(name, width = 8, height = 5, units = "cm")
 

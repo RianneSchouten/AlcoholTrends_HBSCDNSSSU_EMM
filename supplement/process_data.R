@@ -18,8 +18,8 @@ subgroup_numbers <- c(0.0:nr_subgroups)
 
 data_name <- 'HBSC_DNSSSU'
 trend_name <- 'MPALC'
-file_name <- "20210810_None_[8, 40, 3, 20]_[0.05, 1.0]_[False, 100]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max']"
-
+file_name <- "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]"
+  
 out <- import_subgroup_from_resultlist(data_name=data_name,
                                        trend_name=trend_name,
                                        file_name=file_name, 

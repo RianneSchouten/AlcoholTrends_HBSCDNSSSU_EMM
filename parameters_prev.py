@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import warnings
+#warnings.filterwarnings("error")
 
 def parameters_prev(counts=None, dataset=None, time_attribute=None, outcome_attribute=None):
 

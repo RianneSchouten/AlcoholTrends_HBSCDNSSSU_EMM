@@ -56,7 +56,7 @@ def make_false_discovery(i=None, model_params=None,
                                                                       constraints=constraints)
 
     # save qm of the first subgroup
-    qm_value = result_emm.loc[result_emm.sg == 0, 'qm_value'].values[1] # 1 is qualities
+    qm_value = result_emm.loc[result_emm.sg == 0, 'qm_value'].values[2] # 2 is qualities
 
     return qm_value
 

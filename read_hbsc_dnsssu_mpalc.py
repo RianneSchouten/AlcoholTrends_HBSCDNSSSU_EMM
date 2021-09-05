@@ -35,9 +35,9 @@ def define_attributes(data=None, remove_data=None):
     else:
         ord_atts = ['schnivo', 'leerjaar', 'stedgem', 'spijbel']
 
-    #for att in ord_atts:
-    #    print(att)
-    #    print(dataset[att].cat.categories)
+    for att in ord_atts:
+        print(att)
+        print(dataset[att].cat.categories)
 
     descriptives = {'num_atts': num_atts, 'bin_atts': bin_atts, 'nom_atts': nom_atts, 'ord_atts': ord_atts}
 
@@ -48,10 +48,10 @@ def define_attributes(data=None, remove_data=None):
 
 def remove(data=None):
 
-    #print(data.shape)
+    print(data.shape)
     #print(len(data[(data['lft'] < 12) | (data['lft'] > 16)]))
     data = data[(data['lft'] > 11) & (data['lft'] < 17)]
-    #print(data.shape)
+    print(data.shape)
     #print(data.lft.unique())
 
     return data

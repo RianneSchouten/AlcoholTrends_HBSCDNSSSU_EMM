@@ -1,15 +1,15 @@
 ---
-title: "Interactive document with EMM results, version 2"
-author: "Rianne Schouten"
-date: "10/08/2021"
+title: "Interactive supplement to manuscript 'Exceptional trends in adolescent alcohol use in the Netherlands'"
+author: "Rianne Margaretha Schouten, and others"
+date: "18/08/2021"
 output:
   html_document:
     css: custom.css
 runtime: shiny
-#resource_files:
+resource_files:
 #- maxmovprevslope.PNG
 #- maxmovprevslopecount.PNG
-#- maxprev.PNG
+- maxprev.PNG
 #- maxprevslope.PNG
 ---
 
@@ -28,41 +28,9 @@ h2 { /* Header 2 */
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-<p>&nbsp;</p>
+## Introduction
 
-## Contents
-
-In this document:
-
-- What is Exceptional Model Mining?
-
-- What data from HBSC/DNSSSU did we use?
-
-- What type of analyses did we do?
-
-- **Results: investigate the result by yourself!**
-
-
-<p>&nbsp;</p>
-
-## Exceptional Model Mining
-
-Find patterns in a dataset: 
-
-- Subgroups that behave exceptionally
-- With respect to the population trend
-
-A local method:
-
-- Subgroups can overlap
-- Not all adolescents are assigned to a subgroup
-- Adolescents may be part of several subgroups
-
-![](./data/attributes.png){#id .class width=70% height=70%}
-
-Attributes are divided into **descriptors**: used to find subgroups.
-
-And **targets**: used to define exceptional behaviour.
+## Methods
 
 ```{r, include=FALSE, results='hide', cache=TRUE}
 library(reticulate)
@@ -164,61 +132,15 @@ make_table <- function(name,data){
 }
 ```
 
-<p>&nbsp;</p>
-
-## HBSC/DNSSSU
-
-HBSC: 2005, 2009, 2013, 2017
-
-DNSSSU: 2003, 2007, 2011, 2015, 2019
-
-About 4000 adolescents per year (70% of original dataset).
-
-A subgroup can have a maximum coverage of 0.05 (cov = subgroup size / total dataset size).
-
-A description may contain a maximum of 3 variables.
-
-All **descriptors**:
-
-- *binary*: Gender, Lives with both parents
-- *continuous*: Age, Life satisfaction
-- *nominal*: Ethnic group, Does father have a job, Does mother have a job
-- *ordinal*: School level, School year, Urbanity, Number of skipped classes
-
-**Target attribute**: Prevalence of alcohol use in last 4 weeks
-
-
-<p>&nbsp;</p>
-
-## Three questions
-
-1. Exceptional deviation in prevalence:
-
-    Find subgroups where prevalence is higher/lower than in the entire dataset
-    
-2. Exceptional increase/decrease:
-
-    Find subgroups where the average slope is higher/lower than in the entire dataset 
-    
-    (= avg(2005,2007) - avg(2003,2005))
-    
-3. Exceptional horizontal trend:
-
-    Find subgroups with a high number of average slopes that are close to 0 
-    
-    (= avg(2003,2005) < 0.01)
-
-<p>&nbsp;</p>
-  
 ## Results {#results .emphasized}
 
-We present results in an interactive plot. 
+Interactive results are presented in the plot below. 
 
-- **Select subgroups:** fill in numbers between 1 and 20, with comma in between
+- **Select subgroups:** fill in numbers between 1 and 20, use comma to separate
 
-- **Type of exceptionality:** select one of the three types as mentioned above
+- **Type of exceptionality:** select one of three types as mentioned in manuscript
 
-- **Y-axis variable:** select whether you want to see prevalence (for question 1) or average prevalence (for question 2 and 3)
+- **Y-axis variable:** select prevalence as trend variable
 
 <p>&nbsp;</p>
 
@@ -235,53 +157,60 @@ plot <- renderPlot({
   data <- select_data(name = input$select_file)
   nums <- extract(input$subgroups)
   make_plot(data=data, sel_numbers=nums, outcome=input$yaxis)
-}, res = 96, height=400, width=600)
+}, res = 96, height=500, width=600)
 
-#table <- renderImage({
-#  if(input$select_file == "maxprev"){            
-#      list(src = "./www/maxprev.png")
-#  } else if(input$select_file == "maxmovprevslope"){
-#      list(src = "./www/maxmovprevslope.png")
-#  } else if(input$select_file == "maxmovprevslopecount"){
-#      list(src = "./www/maxmovprevslopecount.png")
-#  }}, deleteFile = FALSE)
+table <- renderImage({
+  if(input$select_file == "maxprev"){            
+      list(src = "./www/maxprev.png")
+  } else if(input$select_file == "maxmovprevslope"){
+      list(src = "./www/maxmovprevslope.png")
+  } else if(input$select_file == "maxmovprevslopecount"){
+      list(src = "./www/maxmovprevslopecount.png")
+  }}, deleteFile = FALSE)
 
-table <- div(renderTable(make_table(name = input$select_file,data=select_data(name = input$select_file))), style="font-size:30%")
+#table <- div(renderTable(make_table(name = input$select_file,data=select_data(name = input$select_file))), style="font-size:30%")
 
 fluidPage(
   fluidRow(
     
-    column(6, offset=0, style='padding:0px;margin:0px;',
+    #column(6, offset=0, style='padding:0px;margin:0px;',
 
-       fluidRow(
+       #fluidRow(
            
-        column(4, offset=0, style='padding:0px;margin:0px;',
+    column(3, offset=0, style='padding:0px;margin:0px;',
            textInput("subgroups", "Subgroups:", 
             placeholder = "Enter numbers separated by a comma...",
             value = "1,2,3")),
     
-        column(4, offset=0, style='padding:0px;margin:0px;',
+    column(3, offset=0, style='padding:0px;margin:0px;',
             selectInput("select_file", "Exceptionality:",
-                c("1. Prevalence" = "maxprev",
+                c("1. Prevalence" = "maxprev"
                   #"Slope" = "maxprevslope",
-                  "2. Average slope" = "maxmovprevslope",
-                  "3. Horizontal average slope" = "maxmovprevslopecount"))),
+                  #"2. Average slope" = "maxmovprevslope",
+                  #"3. Horizontal average slope" = "maxmovprevslopecount"
+                  ))),
     
-        column(4, offset=0, style='padding:0px;margin:0px;',
+    column(3, offset=0, style='padding:0px;margin:0px;',
             selectInput("yaxis", "Y-axis variable:",
-                c("Prevalence" = "prev",
-                  "Average of prevalence" = "mov_prev"),
+                c("Prevalence" = "prev"
+                  #"Average of prevalence" = "mov_prev"
+                  ),
                 selected = 1))
-       ),
-       fluidRow(
+  ),
+  fluidRow(
          
-          column(12, plot, offset=0, style='padding:0px;margin:0px;')
-       )
-    ),
-    column(1, offset=0, style='padding:0px;margin:0px;'),
-    column(5, table, offset=0, style='padding:0px;margin:0px;')
+    column(9, plot, offset=4, style='padding:0px;margin:0px;')
+  ),
+  fluidRow(
+    column(1, style = 'padding:0px;margin:0px;')
+  ),
+    #),
+    #column(1, offset=0, style='padding:0px;margin:0px;'),
+    #column(5, table, offset=0, style='padding:0px;margin:0px;')
+    #column(6, offset=0, style='padding:0px;margin:0px;',
+  fluidRow(
+     column(9, table, offset=2, style='padding:0px;margin:0px;')
   )
-
 )
 ```
 
