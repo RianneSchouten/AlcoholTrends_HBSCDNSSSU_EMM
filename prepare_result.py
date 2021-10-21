@@ -49,6 +49,7 @@ def prepare_result_list(result_set=None):
                 new_sg = pd.DataFrame.from_dict(result_set_selected[sg]).T
                 new_sg.drop(columns=['sg_idx'], inplace=True)
                 result_emm = result_emm.append(new_sg)
+            #print(result_emm)
             result_emm['sg'] = np.repeat(np.arange(len(result_set_selected)), 3) 
             result_emm.sort_index(axis=1, inplace=True)  
 

@@ -45,7 +45,7 @@ def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None,
 
             if any(dataset[attribute].isnull()):
                 refined_cq.append({'description' : {attribute : ['NaN']}, 
-                                  'adds': {'literal_order' : (attribute, )}})
+                                   'adds': {'literal_order' : (attribute, )}})
             
             values = dataset.loc[dataset[attribute].notnull(),attribute]
             #values = dataset[attribute]

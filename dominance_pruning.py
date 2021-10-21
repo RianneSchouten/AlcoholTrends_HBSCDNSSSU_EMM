@@ -32,7 +32,9 @@ def get_new_descriptions(result_set=None):
 
         for r in np.arange(1, len(list(items_old_desc))):
             combs = list(it.combinations(items_old_desc, r=r))
-            combs_r = [{'description': dict(desc)} for desc in combs]
+            combs_r = [{'description': dict(desc),
+                        'adds': {'literal_order': ('dom_pruning',)}} for desc in combs]
+            #print(combs_r)
             pruned_descriptions.append(combs_r)
 
     pruned_descriptions = [item for sublist in pruned_descriptions for item in sublist]

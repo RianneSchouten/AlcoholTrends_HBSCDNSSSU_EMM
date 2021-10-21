@@ -47,13 +47,12 @@ select_data <- function(name){
 
   if(name == 'maxprev'){
     data <- read.csv('./data/maxprev.csv', sep = ",")
-  } else if (name == 'maxprevslope'){
-    data <- read.csv('./data/maxprevslope.csv', sep = ",")
+  #} else if (name == 'maxprevslope'){
+  #  data <- read.csv('./data/maxprevslope.csv', sep = ",")
   } else if (name == 'maxmovprevslope'){
     data <- read.csv('./data/maxmovprevslope.csv', sep = ",")
   } else if (name == 'maxmovprevslopecount'){
     data <- read.csv('./data/maxmovprevslopecount.csv', sep = ",")
-    data$mov_prev <- data$mean
   }
   
   data$subgroup <- as.factor(as.numeric(data$subgroup))
@@ -184,16 +183,16 @@ fluidPage(
     
     column(3, offset=0, style='padding:0px;margin:0px;',
             selectInput("select_file", "Exceptionality:",
-                c("1. Prevalence" = "maxprev"
+                c("1. Prevalence" = "maxprev",
                   #"Slope" = "maxprevslope",
-                  #"2. Average slope" = "maxmovprevslope",
-                  #"3. Horizontal average slope" = "maxmovprevslopecount"
+                  "2. Average slope" = "maxmovprevslope",
+                  "3. Horizontal average slope" = "maxmovprevslopecount"
                   ))),
     
     column(3, offset=0, style='padding:0px;margin:0px;',
             selectInput("yaxis", "Y-axis variable:",
-                c("Prevalence" = "prev"
-                  #"Average of prevalence" = "mov_prev"
+                c("Prevalence" = "prev",
+                  "Average of prevalence" = "mov_prev"
                   ),
                 selected = 1))
   ),
@@ -201,9 +200,12 @@ fluidPage(
          
     column(9, plot, offset=4, style='padding:0px;margin:0px;')
   ),
-  fluidRow(
-    column(1, style = 'padding:0px;margin:0px;')
-  ),
+  #fluidRow(
+  #  column(9, style = 'padding:0px;margin:0px;')
+  #),
+  #fluidRow(
+  #  column(9, style = 'padding:0px;margin:0px;')
+  #),
     #),
     #column(1, offset=0, style='padding:0px;margin:0px;'),
     #column(5, table, offset=0, style='padding:0px;margin:0px;')

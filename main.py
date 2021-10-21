@@ -62,7 +62,7 @@ if __name__ == '__main__':
     # Adapted runs aug 2021
     # Variable school year is removed
     # children <12 and >16 are removed
-    # An extra run for decreasing trends
+    '''
     main(data_name='HBSC_DNSSSU', 
          trend_name='MPALC', remove_data=True,
          beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, # 20 descriptive attributes
@@ -72,6 +72,29 @@ if __name__ == '__main__':
          dfd_params = {'make': True, 'm': 10},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width
          date=20210817, 
+         save_location='./data_output/')
+    
+    main(data_name='HBSC_DNSSSU', 
+         trend_name='MPALC', remove_data=True,
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
+         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
+         dfd_params = {'make': True, 'm': 10},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
+         date=20211021, 
+         save_location='./data_output/')
+ 
+    '''
+    main(data_name='HBSC_DNSSSU', 
+         trend_name='MPALC', remove_data=True,
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
+         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
+                         'qm': 'count', 'threshold': 0.005, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
+         dfd_params = {'make': True, 'm': 10},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width
+         date=20211021, 
          save_location='./data_output/')
 
     '''
