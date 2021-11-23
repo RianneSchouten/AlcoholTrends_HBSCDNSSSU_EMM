@@ -20,7 +20,7 @@ nrcons <- list(c(1,2,3), c(1,2,3), c(1,2,3), c(1,2,3),
                c(1,2), c(1,2,3), c(1,2), c(1,2), c(1,2))
 
 pal = c("#abdda4", "#fdae61", "#9e0142")
-for(i in c(15)){
+for(i in c(1:20)){
   nrcon <- nrcons[i][[1]]
   nams <- sapply(nrcon, function(x) paste('condition', i, x, sep=""))
   labels <- sapply(nrcon, function(x) paste('condition', x, sep=""))
