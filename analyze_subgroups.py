@@ -7,7 +7,8 @@ import select_subgroup as ss
 import import_subgroup as iss
 
 def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_data=None,
-                      subgroup_numbers=None, beam_search_params=None, model_params=None):
+                      subgroup_numbers=None, beam_search_params=None, model_params=None,
+                      analyze_var=None):
 
     dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, remove_data=remove_data)
     result_emm, analysis_info, considered_subgroups, general_params_pd, distribution_params = \
@@ -63,7 +64,7 @@ def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_da
                             model_params=model_params, beam_search_params=beam_search_params)            
             #print(desc_qm['qualities']['params'])
             paramspd['condition' + str(sgn+1) + str(i+1)] = \
-                desc_qm['qualities']['params'][model_params['trend_var']]
+                desc_qm['qualities']['params'][analyze_var]
             
             qm_value = desc_qm['qualities']['qm_value']
             qv.append(qm_value)
@@ -136,7 +137,9 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
-                                           'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1})
+                                           'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+                           analyze_var = 'prev')
+'''
 
 ### run inspection for second analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
@@ -147,9 +150,10 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
-                                           'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1})
-'''
+                                           'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+                           analyze_var = 'mov_prev')
 
+'''
 ### run inspection for third analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
@@ -159,4 +163,6 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
-                                           'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1})
+                                           'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
+                           analyze_var = 'mov_prev')
+'''
