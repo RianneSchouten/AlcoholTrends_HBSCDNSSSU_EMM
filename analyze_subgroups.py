@@ -95,7 +95,7 @@ def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_da
     jsmatrix = calculate_jaccard_similarity(js=js)     
     dfs = {'sgs': result, 'jsmatrix': jsmatrix, 'params': paramspd}
 
-    writer = pd.ExcelWriter('data_output/' + data_name + '/' + trend_name + '/' + 'insp_desc_' + file_name + '.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter('data_output/' + data_name + '/' + trend_name + '/' + 'insp_desc_' + file_name + '_' + str(analyze_var) + '.xlsx', engine='xlsxwriter')
     for sheet_name in dfs.keys():
         dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=True)
     writer.save()  
@@ -127,7 +127,7 @@ def calculate_jaccard_similarity(js=None):
 
     return jsmatrix
 
-'''
+
 ### run inspection for first analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
@@ -139,8 +139,8 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'prev')
-'''
 
+'''
 ### run inspection for second analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
@@ -153,7 +153,18 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'mov_prev')
 
+result = analyze_subgroups(data_name = "HBSC_DNSSSU",
+                           trend_name = "MPALC",
+                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]",
+                           remove_data = True,
+                           subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                           #subgroup_numbers=[0,1],
+                           beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
+                           model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                                           'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+                           analyze_var = 'mov_prev_slope')
 '''
+
 ### run inspection for third analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
@@ -165,4 +176,3 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
                                            'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
                            analyze_var = 'mov_prev')
-'''
