@@ -5,8 +5,8 @@ account: rianneschouten
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4506275
-bundleId: 5005160
+bundleId: 5283905
 url: https://rianneschouten.shinyapps.io/InteractiveSupplement/
-when: 1630939040.46755
+when: 1637659661.57823
 asMultiple: FALSE
 asStatic: FALSE

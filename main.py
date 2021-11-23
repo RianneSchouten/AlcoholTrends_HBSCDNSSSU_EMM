@@ -90,7 +90,7 @@ if __name__ == '__main__':
          trend_name='MPALC', remove_data=True,
          beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
          model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
-                         'qm': 'count', 'threshold': 0.005, 'order': 'max', 'round': 1},
+                         'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
          constraints = {'min_size': 0.05, 'min_occassions': 0.78},
          dfd_params = {'make': True, 'm': 10},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width

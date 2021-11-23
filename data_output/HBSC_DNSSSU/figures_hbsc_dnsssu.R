@@ -87,52 +87,6 @@ trend_plot
 name <- "data_output/HBSC_DNSSSU/MPALC/maxprev.pdf"
 ggsave(name, width = 8, height = 5, units = "cm")
 
-# separate condition plots
-# prevalence, max
-
-params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1].xlsx",
-                     sheet = 3)
-sel_params <- params %>% 
-  select(meting, #prev, 
-         condition11, condition12, condition13) %>%
-  rename(year = meting, 
-         #D = prev,
-         condition1 = condition11,
-         condition2 = condition12,
-         condition3 = condition13) %>%
-  gather(group, prev, -c(year))
-
-#pal = c("#fdb462", "#bebada", "#fb8072", "#b3de69", "#636363")
-#pal = c("#fdae6b", "#f16913", "#d94801", "#636363")
-pal = c("#fdae6b", "#f16913", "#d94801")
-conditions_plot <- ggplot(sel_params, aes(x = year, y = prev, color = group)) +
-  geom_point(size=0.8) + 
-  geom_line(size=0.7) + 
-  ggtitle(label = "") + #Prevalence of alcohol use among Dutch adolescents") + 
-  scale_x_continuous(breaks=seq(2003, 2019, 2)) + 
-  xlab("") + 
-  ylab("") + 
-  scale_color_manual(values = pal, 
-                     #labels = c("1", "5", "7", "19", "D"),
-                     name = "") + 
-  guides(color = guide_legend(nrow=1, override.aes = list(size = 0.7)),
-         shape = guide_legend(override.aes = list(size = 0.7))) + 
-  theme_bw(base_size=7) + 
-  theme(legend.position="top",
-        legend.justification="right",
-        legend.box.margin = margin(0,0,-0.2,0, "line"),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        legend.text  = element_text(size = 7),
-        legend.key.width = unit(0.2,"cm"),
-        legend.key.size = unit(0.2,"cm"),
-        plot.margin = unit(x = c(-2, 1, -2, -2), units = "mm"))
-conditions_plot
-
-name <- "data_output/HBSC_DNSSSU/MPALC/maxprevconditions.pdf"
-ggsave(name, width = 8, height = 5, units = "cm")
-
 # mov avg prevalence, max, figure 2
 nr_subgroups = 19.0
 subgroup_numbers <- c(0.0:nr_subgroups)
