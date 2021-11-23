@@ -34,6 +34,7 @@ def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_da
         #print(lorder)  
 
         description = []
+        size = []
         cov = []
         qv = []
         covch = []
@@ -58,6 +59,7 @@ def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_da
                                                                        attributes=attributes, model_params=model_params)                                    
 
             description.append(dict_new.copy())
+            size.append(subgroup_params['sg_size'])
             cov.append(subgroup_params['sg_size']/data_size)
 
             desc_qm = qu.add_qm(desc=dict_new, general_params=general_params, subgroup_params=subgroup_params, 
@@ -84,6 +86,7 @@ def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_da
 
         res = pd.DataFrame({'sg': list(np.repeat(sgn,len(lorder))),
                                    'description': description, 
+                                   'size': size,
                                    'cov': cov, 'qv': qv, 
                                    'covch': covch, 'qvimpr': qvimpr})
 
@@ -140,7 +143,6 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'prev')
 
-'''
 ### run inspection for second analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
@@ -163,7 +165,6 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'mov_prev_slope')
-'''
 
 ### run inspection for third analysis
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
@@ -176,3 +177,14 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
                                            'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
                            analyze_var = 'mov_prev')
+
+result = analyze_subgroups(data_name = "HBSC_DNSSSU",
+                           trend_name = "MPALC",
+                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'count', 0.01, 'max', 1]",
+                           remove_data = True,
+                           subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                           #subgroup_numbers=[0,1],
+                           beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
+                           model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
+                                           'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
+                           analyze_var = 'mov_prev_slope')
