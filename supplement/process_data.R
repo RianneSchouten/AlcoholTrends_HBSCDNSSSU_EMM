@@ -18,13 +18,15 @@ subgroup_numbers <- c(0.0:nr_subgroups)
 
 data_name <- 'HBSC_DNSSSU'
 trend_name <- 'MPALC'
-file_name <- "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]"
-  
+#file_name <- "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]"
+file_name <- "20211214_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]"
+
 out <- import_subgroup_from_resultlist(data_name=data_name,
                                        trend_name=trend_name,
                                        file_name=file_name, 
                                        subgroup_numbers=subgroup_numbers,
-                                       remove_data=TRUE)
+                                       remove_data=FALSE,
+                                       incomplete=TRUE)
 
 general_params <- out[[1]]
 all_params <- out[[2]]
@@ -43,7 +45,7 @@ data <- rbind(all_params_adapted, general_params_adapted) %>%
 
 head(data)
 
-write.csv(data, './presentation/data/maxprev.csv', row.names=FALSE)
+write.csv(data, './supplement/data/maxprev.csv', row.names=FALSE)
 
 # dataset 2
 nr_subgroups = 19.0
@@ -51,13 +53,15 @@ subgroup_numbers <- c(0.0:nr_subgroups)
 
 data_name <- 'HBSC_DNSSSU'
 trend_name <- 'MPALC'
-file_name <- "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]"
+#file_name <- "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]"
+file_name <- "20211215_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]"
 
 out <- import_subgroup_from_resultlist(data_name=data_name,
                                        trend_name=trend_name,
                                        file_name=file_name, 
                                        subgroup_numbers=subgroup_numbers,
-                                       remove_data=TRUE)
+                                       remove_data=FALSE,
+                                       incomplete=TRUE)
 
 general_params <- out[[1]]
 all_params <- out[[2]]
@@ -87,13 +91,14 @@ subgroup_numbers <- c(0.0:nr_subgroups)
 
 data_name <- 'HBSC_DNSSSU'
 trend_name <- 'MPALC'
-file_name <- "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'count', 0.01, 'max', 1]"
+file_name <- "20211221_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 100]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'countsum', 0.01, 'max', 4]"
 
 out <- import_subgroup_from_resultlist(data_name=data_name,
                                        trend_name=trend_name,
                                        file_name=file_name, 
                                        subgroup_numbers=subgroup_numbers,
-                                       remove_data=TRUE)
+                                       remove_data=FALSE,
+                                       incomplete=TRUE)
 
 general_params <- out[[1]]
 all_params <- out[[2]]

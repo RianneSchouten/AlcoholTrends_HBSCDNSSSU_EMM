@@ -40,6 +40,16 @@ def apply_qm_function(subgroup_params=None, model_params=None):
         qm_value = np.sum(subgroup_params['z'].abs() < model_params['threshold'])
         sum_qm_value = np.round(np.sum(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs()), model_params['round'])
         subgroup_params['sum_qm_value'] = sum_qm_value
+
+    elif model_params['qm'] == 'countsum':
+        #print(subgroup_params['z'])
+        #print(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs())
+        #print(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs().sum())
+        #print(np.round(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs().sum()), 1)
+        sel_z = subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs().subtract(model_params['threshold'])
+        #print(sel_z)
+        qm_value = np.round(sel_z.abs().sum(), model_params['round'])
+        #qm_value = np.round(np.sum(subgroup_params['z'][subgroup_params['z'].abs() < model_params['threshold']].abs()), model_params['round'])
         
     elif model_params['qm'] == 'average':
         qm_value = np.round(subgroup_params['z'].abs().mean(), model_params['round'])

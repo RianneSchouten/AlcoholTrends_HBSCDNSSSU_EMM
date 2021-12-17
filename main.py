@@ -4,7 +4,7 @@ import pandas as pd
 import analysis as an
 
 def main(data_name=None, trend_name=None, 
-         remove_data=None, qm=None, 
+         remove_data=None, incomplete=None, qm=None, 
          beam_search_params=None, model_params=None,
          constraints=None, wcs_params=None,
          dfd_params=None, date=None,
@@ -21,6 +21,7 @@ def main(data_name=None, trend_name=None,
     result_emm, general_params, considered_subgroups, distribution_params = an.analysis(data_name=data_name,
                                                                                         trend_name=trend_name,
                                                                                         remove_data=remove_data,
+                                                                                        incomplete=incomplete,
                                                                                         model_params=model_params,
                                                                                         beam_search_params=beam_search_params, 
                                                                                         constraints=constraints,
@@ -55,17 +56,55 @@ if __name__ == '__main__':
     # current options for hypothesis: data, value
     # current options for value: any value in combination with hypothesis: value
     # current options for use_se (if hypothesis = value): True, False, 'multiply'
-    # current options for qm: max, count, average, sum, min
+    # current options for qm: max, count, average, sum, min, countsum
     # current options for threshold: any value (<) in combination with qm: count
 
     #### HBSC and DNSSSU
+    # Adapted runs dec 2021
+    # With incomplete, non-split dataset 
+    # exceptionality type 1
+    main(data_name='HBSC_DNSSSU', 
+         trend_name='MPALC', remove_data=False, incomplete=True, 
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
+         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 1.0},
+         dfd_params = {'make': True, 'm': 10},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
+         date=20211214, 
+         save_location='./data_output/')
+
+    # exceptionality type 2    
+    main(data_name='HBSC_DNSSSU', 
+         trend_name='MPALC', remove_data=False, incomplete=True, 
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
+         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
+         dfd_params = {'make': True, 'm': 10},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
+         date=20211215, 
+         save_location='./data_output/')
+
+    # exceptionality type 3
+    main(data_name='HBSC_DNSSSU', 
+         trend_name='MPALC', remove_data=False, incomplete=True, 
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
+         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
+                         'qm': 'countsum', 'threshold': 0.01, 'order': 'max', 'round': 4}, # change threshold to 0.005 or 0.02
+         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
+         dfd_params = {'make': True, 'm': 100},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
+         date=20211221, 
+         save_location='./data_output/')  
+
     # Adapted runs aug 2021
     # Variable school year is removed
     # children <12 and >16 are removed
     '''
     main(data_name='HBSC_DNSSSU', 
          trend_name='MPALC', remove_data=True,
-         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, # 20 descriptive attributes
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
          model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                          'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
          constraints = {'min_size': 0.05, 'min_occassions': 1.0},
@@ -85,7 +124,6 @@ if __name__ == '__main__':
          date=20211021, 
          save_location='./data_output/')
  
-    '''
     main(data_name='HBSC_DNSSSU', 
          trend_name='MPALC', remove_data=True,
          beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
@@ -96,7 +134,7 @@ if __name__ == '__main__':
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, # two times the beam width
          date=20211021, 
          save_location='./data_output/')
-
+    '''
     '''
     # Original runs may/june 2021
     main(data_name='HBSC_DNSSSU', 

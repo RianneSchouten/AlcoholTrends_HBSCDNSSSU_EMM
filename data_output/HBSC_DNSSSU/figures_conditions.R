@@ -12,12 +12,21 @@ setwd("C:/Users/20200059/Documents/Github/AlcoholTrends_HBSCDNSSSU_EMM/")
 # prevalence, max
 params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]_prev.xlsx",
                      sheet = 3)
+params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211214_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]_prev.xlsx",
+                     sheet = 3)
 namesparams <- names(params)
-nrcons <- list(c(1,2,3), c(1,2,3), c(1,2,3), c(1,2,3), 
+#nrcons <- list(c(1,2,3), c(1,2,3), c(1,2,3), c(1,2,3), 
+#               c(1,2,3), c(1,2,3), 
+#               c(1,2), c(1,2,3), c(1,2), c(1,2,3), c(1,2,3), 
+#               c(1,2), c(1,2,3), c(1), c(1,2),
+#               c(1,2), c(1,2,3), c(1,2), c(1,2), c(1,2))
+
+nrcons <- list(c(1,2,3), c(1,2,3), c(1,2,3), 
                c(1,2,3), c(1,2,3), 
-               c(1,2), c(1,2,3), c(1,2), c(1,2,3), c(1,2,3), 
-               c(1,2), c(1,2,3), c(1), c(1,2),
-               c(1,2), c(1,2,3), c(1,2), c(1,2), c(1,2))
+               c(1,2), c(1,2), c(1,2), c(1,2,3),
+               c(1,2,3), c(1,2), c(1,2),
+               c(1), c(1,2), c(1,2), c(1,2),
+               c(1,2), c(1), c(1,2), c(1,2))
 
 pal = c("#abdda4", "#fdae61", "#9e0142")
 for(i in c(1:20)){
@@ -62,17 +71,18 @@ for(i in c(1:20)){
 }
 
 # prevalence slope, max
-#params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]_mov_prev.xlsx",
+#params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211215_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]_mov_prev.xlsx",
 #                     sheet = 3)
-params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211021_mov_prev.xlsx",
+params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211215_max_mov_prev.xlsx",
                      sheet = 3)
 namesparams <- names(params)
-nrcons <- list(c(1,2),c(1,2),c(1,2,3),c(1,2),
-               c(1,2),c(1),c(1,2),c(1,2,3),c(1),c(1,2,3),
-               c(1,2),c(1),c(1),c(1),c(1),c(1,2,3),c(1),c(1),c(1,2,3),c(1))
+nrcons <- list(c(1), c(1,2), c(1,2), c(1,2,3),
+               c(1,2),c(1,2), c(1,2), c(1,2), c(1,2), c(1,2), 
+               c(1,2), c(1,2), c(1,2), c(1), c(1,2),
+               c(1,2), c(1,2), c(1), c(1,2), c(1,2))
 
 pal = c("#abdda4", "#fdae61", "#9e0142")
-for(i in c(1,5,7,11)){#2,3,4,8,10,16,19)){
+for(i in c(1,5,6,10,12,16)){
   nrcon <- nrcons[i][[1]]
   nams <- sapply(nrcon, function(x) paste('condition', i, x, sep=""))
   labels <- sapply(nrcon, function(x) paste('condition', x, sep=""))
@@ -117,12 +127,18 @@ for(i in c(1,5,7,11)){#2,3,4,8,10,16,19)){
 }
 
 # to see difference in movprevslope
-#params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]_mov_prev_slope.xlsx",
+#params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211221_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 100]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'countsum', 0.01, 'max', 4]_mov_prev_slope.xlsx",
 #                     sheet = 3)
-params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211021_mov_prev_slope.xlsx",
+params <- read_excel("data_output/HBSC_DNSSSU/MPALC/insp_desc_20211221_count_mov_prev_slope.xlsx",
                      sheet = 3)
 
-for(i in c(1,5,7,11)){#2,3,4,8,10,16,19)){
+nrcons <- list(c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),
+               c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),
+               c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),c(1,2,3),
+               c(1,2,3),c(1,2),c(1,2,3),c(1,2,3),c(1,2,3))
+
+pal = c("#abdda4", "#fdae61", "#9e0142")
+for(i in c(1,2,5,9)){
   nrcon <- nrcons[i][[1]]
   nams <- sapply(nrcon, function(x) paste('condition', i, x, sep=""))
   labels <- sapply(nrcon, function(x) paste('condition', x, sep=""))

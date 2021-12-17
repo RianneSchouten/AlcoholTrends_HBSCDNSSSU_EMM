@@ -6,13 +6,14 @@ import beam_search as bs
 import distribution_false_discoveries as dfd
 
 def analysis(data_name=None, trend_name=None, model_params=None, beam_search_params=None, 
-             constraints=None, dfd_params=None, wcs_params=None, remove_data=None):
+             constraints=None, dfd_params=None, wcs_params=None, remove_data=None, incomplete=None):
 
     dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, 
-                                                      remove_data=remove_data)
+                                                      remove_data=remove_data, incomplete=incomplete)
     print(descriptives)
     print(attributes)
     print(dataset.dtypes)
+    print(dataset.shape)
 
     beam_search_params['pareto'] = False
 

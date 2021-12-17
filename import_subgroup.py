@@ -7,9 +7,9 @@ import select_subgroup as ss
 
 def import_subgroup_from_resultlist(data_name=None, trend_name=None, 
                                     file_name=None, subgroup_numbers=None,
-                                    remove_data=None):
+                                    remove_data=None, incomplete=None):
 
-    dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, remove_data=remove_data)
+    dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, remove_data=remove_data, incomplete=incomplete)
     result_emm, analysis_info, considered_subgroups, general_params_pd, distribution_params = \
         load_result_emm(file_name=data_name + '/' + trend_name + '/' + file_name + '.xlsx')
     data_size = np.sum(general_params_pd['n'].values) 

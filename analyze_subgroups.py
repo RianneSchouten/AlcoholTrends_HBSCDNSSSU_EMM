@@ -8,9 +8,9 @@ import import_subgroup as iss
 
 def analyze_subgroups(data_name=None, trend_name=None, file_name=None, remove_data=None,
                       subgroup_numbers=None, beam_search_params=None, model_params=None,
-                      analyze_var=None):
+                      analyze_var=None, incomplete=None):
 
-    dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, remove_data=remove_data)
+    dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, remove_data=remove_data, incomplete=incomplete)
     result_emm, analysis_info, considered_subgroups, general_params_pd, distribution_params = \
             iss.load_result_emm(file_name=data_name + '/' + trend_name + '/' + file_name + '.xlsx')
     data_size = np.sum(general_params_pd['n'].values) 
@@ -130,26 +130,25 @@ def calculate_jaccard_similarity(js=None):
 
     return jsmatrix
 
-
-### run inspection for first analysis
+# exceptionality type 1
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20210817_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]",
-                           remove_data = True,
+                           file_name = "20211214_None_[8, 40, 3, 20]_[0.05, 1.0]_[True, 10]_[0.9, 80]_['prev', 'data', None, None, 'max', None, 'max', 1]",
+                           remove_data = False,
+                           incomplete = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                           #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'prev')
 
-### run inspection for second analysis
+# exceptionality type 2
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]",
-                           remove_data = True,
+                           file_name = "20211215_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]",
+                           remove_data = False,
+                           incomplete = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                           #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
@@ -157,34 +156,34 @@ result = analyze_subgroups(data_name = "HBSC_DNSSSU",
 
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]",
-                           remove_data = True,
+                           file_name = "20211215_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'data', None, None, 'max', None, 'max', 1]",
+                           remove_data = False,
+                           incomplete = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                           #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                                            'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
                            analyze_var = 'mov_prev_slope')
 
-### run inspection for third analysis
+# exceptionality type 3
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'count', 0.01, 'max', 1]",
-                           remove_data = True,
+                           file_name = "20211221_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 100]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'countsum', 0.01, 'max', 4]",
+                           remove_data = False,
+                           incomplete = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                           #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
-                                           'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
+                                           'qm': 'countsum', 'threshold': 0.01, 'order': 'max', 'round': 4},
                            analyze_var = 'mov_prev')
 
 result = analyze_subgroups(data_name = "HBSC_DNSSSU",
                            trend_name = "MPALC",
-                           file_name = "20211021_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 10]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'count', 0.01, 'max', 1]",
-                           remove_data = True,
+                           file_name = "20211221_None_[8, 40, 3, 20]_[0.05, 0.78]_[True, 100]_[0.9, 80]_['mov_prev_slope', 'value', 0.0, False, 'countsum', 0.01, 'max', 4]",
+                           remove_data = False,
+                           incomplete = True,
                            subgroup_numbers=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                           #subgroup_numbers=[0,1],
                            beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
                            model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
-                                           'qm': 'count', 'threshold': 0.01, 'order': 'max', 'round': 1},
+                                           'qm': 'countsum', 'threshold': 0.01, 'order': 'max', 'round': 4},
                            analyze_var = 'mov_prev_slope')
