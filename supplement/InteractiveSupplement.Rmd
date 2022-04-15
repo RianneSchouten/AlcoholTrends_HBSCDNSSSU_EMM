@@ -1,7 +1,7 @@
 ---
-title: "Interactive supplement to manuscript 'Exceptional trends in adolescent alcohol use in the Netherlands'"
-author: "Rianne Margaretha Schouten, and others"
-date: "18/08/2021"
+title: "Interactive supplement of 'Exceptional trends in adolescent alcohol use in the Netherlands: Analyzing the interplay between socio-demographic variables and societal trends with local pattern mining'"
+author: "Rianne M. Schouten, Gonneke W.J.M. Stevens, Saskia A.F.M. van Dorsselaer, Elisa L. Duinhof, Karin Monshouwer and Wouter Duivesteijn"
+date: "Manuscript submitted to Sociological Methods & Research"
 output:
   html_document:
     css: custom.css
@@ -28,9 +28,9 @@ h2 { /* Header 2 */
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Introduction
+## Abstract
 
-## Methods
+Trends in adolescent monthly alcohol use in the Netherlands vary across subgroups. With traditional statistical approaches, it is challenging to analyze the interaction between socio-demographic variables and their relation to societal trends: only a few variables can be included, groups must be pre-defined, and linearity assumptions are required. We propose to resolve these issues, by deploying a local pattern mining approach called Exceptional Model Mining for Repeated Cross-Sectional data (EMM-RCS) as a sociological method. EMM-RCS heuristically searches through a large space of candidate subgroups, automatically identifying those that have the most exceptional trends. Our results demonstrate the value of EMM-RCS: on the one hand by confirming existing knowledge that age, educational level, and migration background are important descriptors of monthly alcohol use; on the other hand by providing new insights that interactions with life satisfaction, urbanization degree, and whether or not adolescents skip classes may further amplify these effects.
 
 ```{r, include=FALSE, results='hide', cache=TRUE}
 library(reticulate)
@@ -137,9 +137,9 @@ Interactive results are presented in the plot below.
 
 - **Select subgroups:** fill in numbers between 1 and 20, use comma to separate
 
-- **Type of exceptionality:** select one of three types as mentioned in manuscript
+- **Type of exceptional trend behavior:** select one of three types as mentioned in manuscript
 
-- **Y-axis variable:** select prevalence as trend variable
+- **Y-axis variable:** select prevalence of monthly alcohol use or moving average of the prevalence of monthly alcohol use
 
 <p>&nbsp;</p>
 
