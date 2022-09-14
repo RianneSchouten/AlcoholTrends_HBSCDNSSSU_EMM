@@ -65,7 +65,8 @@ trend_plot <- ggplot(sel, aes(x = year, y = prev, color = subgroup)) +
   xlab("") + 
   ylab("") + 
   scale_color_manual(values = pal, 
-                     labels = c("1", "4", "6", "11", "13", "D"),
+                     #labels = c("1", "4", "6", "11", "13", "D"),
+                     labels = c("1", "2", "3", "4", "5", "D"),
                      name = "") + 
   guides(color = guide_legend(nrow=1, override.aes = list(size = 0.7)),
          shape = guide_legend(override.aes = list(size = 0.7))) + 
@@ -130,7 +131,8 @@ trend_plot <- ggplot(sel, aes(x = year, y = mov_prev, color = subgroup)) +
   xlab("") + 
   ylab("") + 
   scale_color_manual(values = pal, 
-                     labels = c("1", "2", "3", "6", "11", "D"), # new numbers
+                     #labels = c("1", "2", "3", "6", "11", "D"), 
+                     labels = c("1", "2", "3", "4", "5", "D"),
                      name = "") + 
   guides(color = guide_legend(nrow=1, override.aes = list(size = 0.7)),
          shape = guide_legend(override.aes = list(size = 0.7))) + 
@@ -193,7 +195,8 @@ trend_plot <- ggplot(sel, aes(x = year, y = mov_prev, color = subgroup)) +
   xlab("") + 
   ylab("") + 
   scale_color_manual(values = pal, 
-                     labels = c("1", "2", "5", "7", "D"), # new numbers
+                     #labels = c("1", "2", "5", "7", "D"),
+                     labels = c("1", "2", "3", "4", "D"),
                      name = "") + 
   guides(color = guide_legend(nrow=1, override.aes = list(size = 0.7)),
          shape = guide_legend(override.aes = list(size = 0.7))) + 
