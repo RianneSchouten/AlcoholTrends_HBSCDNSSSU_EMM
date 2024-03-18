@@ -8,6 +8,9 @@ def preprocess(data_params=None):
     if data_params['data_name'] == 'HBSC_DNSSSU':
         if data_params['trend_name'] == 'MPALC':
             dataset, attributes, descriptives = rhdm.load_and_preprocess(data_params)
+    print(dataset.head())
+    print(attributes)
+    print(descriptives)
 
     return dataset, attributes, descriptives
 

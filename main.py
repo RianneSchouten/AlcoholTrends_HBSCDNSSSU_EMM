@@ -64,7 +64,15 @@ def main(data_params=None, qm=None,
     writer.close()    
 
 if __name__ == '__main__':
-    
+
+    # current options for trend_var: prev, prev_slope, mov_prev, mov_prev_slope, mean, ratio
+    # current options for hypothesis: data, value
+    # current options for value: any value in combination with hypothesis: value
+    # current options for use_se (if hypothesis = value): True, False, 'multiply'
+    # current options for qm: max, count, average, sum, min, countsum
+    # current options for threshold: any value (<) in combination with qm: count
+
+    '''    
     main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
                         'remove_data':False, 'incomplete':True, 'take_slice':False}, 
          beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
@@ -97,55 +105,19 @@ if __name__ == '__main__':
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
          date=19032024, 
          output_to='./data_output/')  
-
-
-    # current options for trend_var: prev, prev_slope, mov_prev, mov_prev_slope, mean, ratio
-    # current options for hypothesis: data, value
-    # current options for value: any value in combination with hypothesis: value
-    # current options for use_se (if hypothesis = value): True, False, 'multiply'
-    # current options for qm: max, count, average, sum, min, countsum
-    # current options for threshold: any value (<) in combination with qm: count
-
     '''
-    #### HBSC and DNSSSU
-    # Adapted runs dec 2021
-    # With incomplete, non-split dataset 
-    # exceptionality type 1
-    main(data_name='HBSC_DNSSSU', 
-         trend_name='MPALC', remove_data=False, incomplete=True, 
+
+    # with sliced data
+    main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
+                        'remove_data':False, 'incomplete':False, 'take_slice':True}, 
          beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
          model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                          'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
          constraints = {'min_size': 0.05, 'min_occassions': 1.0},
-         dfd_params = {'make': True, 'm': 10},
+         dfd_params = {'make': False, 'm': 100},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
-         date=20211214, 
-         save_location='./data_output/')
-
-    # exceptionality type 2    
-    main(data_name='HBSC_DNSSSU', 
-         trend_name='MPALC', remove_data=False, incomplete=True, 
-         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20},
-         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'data', 'value': None, 'use_se': None, 
-                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
-         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
-         dfd_params = {'make': True, 'm': 10},
-         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
-         date=20211215, 
-         save_location='./data_output/')
-
-    # exceptionality type 3
-    main(data_name='HBSC_DNSSSU', 
-         trend_name='MPALC', remove_data=False, incomplete=True, 
-         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
-         model_params = {'trend_var': 'mov_prev_slope', 'hypothesis': 'value', 'value': 0.0, 'use_se': False, 
-                         'qm': 'countsum', 'threshold': 0.01, 'order': 'max', 'round': 4}, # change threshold to 0.005 or 0.02
-         constraints = {'min_size': 0.05, 'min_occassions': 0.78},
-         dfd_params = {'make': True, 'm': 100},
-         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
-         date=20211221, 
-         save_location='./data_output/')  
-     '''
+         date=20032024, 
+         output_to='./data_output/')
     
 
     
