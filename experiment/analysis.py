@@ -1,21 +1,20 @@
 import numpy as np
 import pandas as pd
 
-import preprocess as pp
-import beam_search as bs
-import distribution_false_discoveries as dfd
+import data_input.preprocess as pp
+import beam_search.beam_search as bs
+import beam_search.distribution_false_discoveries as dfd
+import evaluation.analyze_subgroups as asub
 
-def analysis(data_name=None, trend_name=None, model_params=None, beam_search_params=None, 
-             constraints=None, dfd_params=None, wcs_params=None, remove_data=None, incomplete=None):
+def analysis(data_params=None, model_params=None, beam_search_params=None, 
+             constraints=None, dfd_params=None, wcs_params=None):
 
-    dataset, attributes, descriptives = pp.preprocess(data_name=data_name, trend_name=trend_name, 
-                                                      remove_data=remove_data, incomplete=incomplete)
+    dataset, attributes, descriptives = pp.preprocess(data_params=data_params)
     print(descriptives)
     print(attributes)
-    print(dataset.dtypes)
+    #print(dataset.dtypes)
     print(dataset.shape)
-
-    beam_search_params['pareto'] = False
+    print(dataset.head())
 
     # check if distribution has to be made
     if dfd_params['make']:
@@ -29,11 +28,21 @@ def analysis(data_name=None, trend_name=None, model_params=None, beam_search_par
         distribution_params = None               
 
     # a single run
-    print(beam_search_params)
     result_emm, general_params, considered_subgroups = bs.beam_search(dataset=dataset, attributes=attributes, descriptives=descriptives, 
                                                                       model_params=model_params, beam_search_params=beam_search_params, 
                                                                       wcs_params=wcs_params, constraints=constraints)
 
-    result_analysis = result_emm
+    #print(result_emm)
+    #print(considered_subgroups)
 
-    return result_analysis, general_params, considered_subgroups, distribution_params
+    if model_params['trend_var'] == 'prev':
+        analyze_var = 'prev'
+    else: 
+        analyze_var = 'mov_prev'
+
+    sgs, jsmatrix = asub.analyze_subgroups(dataset=dataset, attributes=attributes, descriptives=descriptives, 
+                                           result_emm=result_emm, general_params=general_params, 
+                                           beam_search_params=beam_search_params, model_params=model_params,
+                                           analyze_var=analyze_var)
+
+    return result_emm, general_params, considered_subgroups, distribution_params, sgs, jsmatrix
