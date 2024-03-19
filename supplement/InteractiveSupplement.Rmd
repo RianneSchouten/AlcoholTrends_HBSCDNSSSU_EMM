@@ -1,7 +1,7 @@
 ---
-title: "Interactive Supplement -- Exceptional trends in adolescent alcohol use in the Netherlands: Analyzing the interplay between socio-demographic variables and societal trends with local pattern mining'"
+title: "Interactive Supplement -- Analyzing the interplay between societal trends and socio-demographic variables with local pattern mining: Discovering exceptional trends in adolescent alcohol use in the Netherlands'"
 author: "Rianne M. Schouten, Gonneke W.J.M. Stevens, Saskia A.F.M. van Dorsselaer, Elisa L. Duinhof, Karin Monshouwer, Mykola Pechenizkiy, Wouter Duivesteijn"
-date: "Manuscript submitted to Sociological Methods & Research"
+date: "Manuscript submitted to ADS track ECMLPKDD 2024"
 output:
   html_document:
     css: custom.css
