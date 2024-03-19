@@ -75,6 +75,8 @@ def analysis(data_params=None, md_method=None, model_params=None, beam_search_pa
                                            beam_search_params=beam_search_params, model_params=model_params,
                                            analyze_var=analyze_var)
 
+    '''
+    # not yet ready; not presented in manuscript
     if md_params is not None:
         if 'run_experiment'in md_params.keys():
             if md_params['run_experiment']:
@@ -82,5 +84,6 @@ def analysis(data_params=None, md_method=None, model_params=None, beam_search_pa
                                           dataset=dataset, attributes=attributes, descriptives=descriptives, 
                                           model_params=model_params, beam_search_params=beam_search_params, 
                                           wcs_params=wcs_params, constraints=constraints)
-
+    '''
+                                          
     return result_emm, general_params, considered_subgroups, distribution_params, sgs, jsmatrix

@@ -8,7 +8,7 @@ import experiment.save_and_store as ss
 def main(data_params=None, 
          beam_search_params=None, model_params=None,
          constraints=None, wcs_params=None,
-         dfd_params=None, md_params=None, date=None,
+         dfd_params=None, date=None,
          output_to=None):
     
     # create path and empty output file 
@@ -24,7 +24,7 @@ def main(data_params=None,
     if 'md' in beam_search_params.keys():
         # apply md to bs        
         an.md_analysis(data_params=data_params, model_params=model_params,beam_search_params=beam_search_params, 
-                       constraints=constraints, dfd_params=dfd_params, wcs_params=wcs_params, md_params=md_params,
+                       constraints=constraints, dfd_params=dfd_params, wcs_params=wcs_params, 
                        output_to_path=output_to_path, file_name=file_name, all_params=all_params)
     else:
         result_emm, general_params, considered_subgroups, distribution_params, sgs, jsmatrix = an.analysis(data_params=data_params,
@@ -32,7 +32,7 @@ def main(data_params=None,
                                                                                         beam_search_params=beam_search_params, 
                                                                                         constraints=constraints,
                                                                                         dfd_params=dfd_params, 
-                                                                                        wcs_params=wcs_params, md_params=md_params)
+                                                                                        wcs_params=wcs_params)
         ss.save_one_emm_result(result_emm=result_emm, general_params=general_params, considered_subgroups=considered_subgroups, 
                                distribution_params=distribution_params, sgs=sgs, jsmatrix=jsmatrix, output_to_path=output_to_path, 
                                file_name=file_name, all_params=all_params)
@@ -105,21 +105,6 @@ if __name__ == '__main__':
          md_params = {'run_experiment': False},
          wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80, 'evaluate_jsim': False}, 
          date=21032024, 
-         output_to='./data_output/')
-    '''
-    '''
-    # MD Experiment
-    main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
-                        'remove_data':False, 'incomplete':False, 'take_slice':False}, 
-         beam_search_params = {'b': 4, 'w': 10, 'd': 1, 'q': 2}, 
-         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
-                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
-         constraints = {'min_size': 0.05, 'min_occassions': 1.0},
-         dfd_params = {'make': False, 'm': 2},
-         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80, 'evaluate_jsim': False}, 
-         md_params = {'run_experiment': True, 'md':['cca','ignore','ignore_and_allow','ignore_allow_and_both'],
-                      'prop': [0.1], 'mech': ['mar'], 'dep_var': ['lft'], 'indep_var': ['cijferleven']},
-         date=20032024, 
          output_to='./data_output/')
     '''
 
