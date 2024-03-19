@@ -90,13 +90,13 @@ def load(data_params=None):
         #print(dataset['spijbel'].cat.categories)
 
     else:
-        import warnings
         warnings.warn("only a slice of the data is publicly available: set take_slice to True")
         path_to_data = "C:/Users/20200059/Documents/Data/HBSC/Data/AlcoholTrends_HBSCDNSSSU_EMM/"
         if data_params['incomplete']:
             name_dataset = path_to_data + 'PeilHBSC20032019_' + data_params['trend_name'] + '_incomplete.sav'
-        elif not data_params['incomplete']:            
-            raise NameError('the option incomplete = False only exists for reproducibility reasons, it is currently not available')   
+        elif not data_params['incomplete']: 
+            name_dataset = path_to_data + 'PeilHBSC20032019_' + data_params['trend_name'] + '_complete.sav'           
+            #raise NameError('the option incomplete = False only exists for reproducibility reasons, it is currently not available')   
             #name_dataset = path_to_data + 'PeilHBSC20032019_' + data_params['trend_name'] + '_70.sav'
         
         dataset = pd.read_spss(name_dataset)

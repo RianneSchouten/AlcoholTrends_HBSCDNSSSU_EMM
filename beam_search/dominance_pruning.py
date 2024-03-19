@@ -6,14 +6,15 @@ import beam_search.select_subgroup as ss
 import beam_search.collect_qualities as qu
 import beam_search.constraints as cs
 
-def apply_dominance_pruning(result_set=None, dataset=None, descriptives=None, attributes=None, general_params=None, model_params=None, beam_search_params=None, constraints=None):
+def apply_dominance_pruning(result_set=None, dataset=None, md_method=None, descriptives=None, attributes=None, general_params=None, model_params=None, beam_search_params=None, constraints=None):
 
     print('start pruning')
 
     current_result_set = result_set.copy()
     pruned_descriptions = get_new_descriptions(result_set=result_set)
     pruned_subgroups, n_small_groups, n_type_small_subgroup, n_type_small_occassions, n_type_no_subgroup, n_connected_occassions = get_new_qualities(pruned_descriptions=pruned_descriptions, \
-        dataset=dataset, descriptives=descriptives, attributes=attributes, general_params=general_params, model_params=model_params, beam_search_params=beam_search_params, constraints=constraints)
+        dataset=dataset, md_method=md_method, descriptives=descriptives, attributes=attributes, general_params=general_params, \
+            model_params=model_params, beam_search_params=beam_search_params, constraints=constraints)
 
     # append with result_set, to keep the original subgroups as well
     all_subgroups = [current_result_set.copy()]
@@ -41,7 +42,7 @@ def get_new_descriptions(result_set=None):
 
     return pruned_descriptions
 
-def get_new_qualities(pruned_descriptions=None, dataset=None, descriptives=None, attributes=None, general_params=None, model_params=None, beam_search_params=None, constraints=None):
+def get_new_qualities(pruned_descriptions=None, dataset=None, md_method=None, descriptives=None, attributes=None, general_params=None, model_params=None, beam_search_params=None, constraints=None):
 
     pruned_subgroups = []
     n_small_groups = 0
@@ -49,12 +50,14 @@ def get_new_qualities(pruned_descriptions=None, dataset=None, descriptives=None,
     n_type_small_occassions = 0
     n_type_no_subgroup = 0
     n_connected_occassions = 0
+
+    #print(pruned_descriptions)
     
     for desc in pruned_descriptions:
 
         #print(desc)
 
-        subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=desc['description'], df=dataset, descriptives=descriptives)
+        subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=desc['description'], df=dataset, descriptives=descriptives, md_method=md_method)
         
         if len(idx_sg) == 0:
             n_small_groups += 1

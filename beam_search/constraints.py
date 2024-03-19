@@ -12,14 +12,19 @@ def similar_description(desc=None, cq_satisfied=None):
     # this queue is saved in cq_satisfied
     # in theory, a refinement at the current level can be similar to a desc from an earlier level
     # this can happen for numerical and ordinal attributes
-    # changes are low that those descriptions will end up in the result list together
+    # however, chances are low that those descriptions will end up in the result list together
     for seed in cq_satisfied:
+        
+        #print(desc['description'])
+        #print(seed['description'])
 
         current = desc['description'].copy()
         #order = current.pop('literal_order')
         new = seed['description'].copy()
         #order_new = new.pop('literal_order')
         if current == new:
+            #print(current)
+            #print(new)
             check_similar_description = False
             break
 

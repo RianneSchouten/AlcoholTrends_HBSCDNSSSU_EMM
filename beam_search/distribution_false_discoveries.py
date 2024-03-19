@@ -5,12 +5,12 @@ from joblib import Parallel, delayed
 
 import beam_search.beam_search as bs
 
-def distribution_false_discoveries_params(m=None, model_params=None, beam_search_params=None, dataset=None, attributes=None, descriptives=None, 
+def distribution_false_discoveries_params(m=None, md_method=None, model_params=None, beam_search_params=None, dataset=None, attributes=None, descriptives=None, 
                                           wcs_params=None, constraints=None):
 
     beam_search_params_temp = beam_search_params.copy()
     beam_search_params_temp['q'] = 1
-    distribution = make_distribution_false_discoveries(m=m, model_params=model_params, 
+    distribution = make_distribution_false_discoveries(m=m, md_method=md_method, model_params=model_params, 
                                                        dataset=dataset, attributes=attributes, descriptives=descriptives, 
                                                        beam_search_params_temp=beam_search_params_temp, 
                                                        wcs_params=wcs_params, constraints=constraints)
@@ -29,20 +29,20 @@ def distribution_false_discoveries_params(m=None, model_params=None, beam_search
 
     return distribution_params
 
-def make_distribution_false_discoveries(m=None, model_params=None, 
+def make_distribution_false_discoveries(m=None, md_method=None, model_params=None, 
                                         dataset=None, attributes=None, descriptives=None, 
                                         beam_search_params_temp=None, wcs_params=None, constraints=None):
 
     inputs = range(m)
     print('building distribution of false discoveries...')
 
-    qm_values = Parallel(n_jobs=-2)(delayed(make_false_discovery)(i, model_params, dataset, attributes, descriptives, 
+    qm_values = Parallel(n_jobs=-2)(delayed(make_false_discovery)(i, md_method, model_params, dataset, attributes, descriptives, 
                                                                   beam_search_params_temp, wcs_params,
                                                                   constraints) for i in inputs)
 
     return qm_values
 
-def make_false_discovery(i=None, model_params=None, 
+def make_false_discovery(i=None, md_method=None, model_params=None, 
                          dataset=None, attributes=None, descriptives=None, 
                          beam_search_params_temp=None, wcs_params=None, constraints=None):
 
@@ -51,7 +51,7 @@ def make_false_discovery(i=None, model_params=None,
     shuffled_dataset = shuffle_dataset(dataset=dataset, attributes=attributes, descriptives=descriptives)
 
     # perform beam search    
-    result_emm, general_params, considered_subgroups = bs.beam_search(dataset=shuffled_dataset, attributes=attributes, descriptives=descriptives, 
+    result_emm, general_params, considered_subgroups = bs.beam_search(dataset=shuffled_dataset, md_method=md_method, attributes=attributes, descriptives=descriptives, 
                                                                       model_params=model_params, beam_search_params=beam_search_params_temp, wcs_params=wcs_params,
                                                                       constraints=constraints)
 

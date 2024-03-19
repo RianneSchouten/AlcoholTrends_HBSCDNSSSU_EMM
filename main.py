@@ -3,65 +3,40 @@ import pandas as pd
 import os
 
 import experiment.analysis as an
+import experiment.save_and_store as ss
 
-def main(data_params=None, qm=None, 
+def main(data_params=None, 
          beam_search_params=None, model_params=None,
          constraints=None, wcs_params=None,
-         dfd_params=None, date=None,
+         dfd_params=None, md_params=None, date=None,
          output_to=None):
     
     # create path and empty output file 
     output_to_path = output_to + data_params['data_name'] + '/' + data_params['trend_name'] + '/' + 'date' + str(date) + '/'
     if not os.path.exists(output_to_path):
         os.makedirs(output_to_path)  
-    file_name = output_to_path + model_params['trend_var'] + '_' + model_params['qm']
-    #excel_file_name, sheet_names = ssr.create_empty_output_file(output_to_path=output_to_path)
+    file_name = model_params['trend_var'] + '_' + model_params['qm']
 
-    # location of dfd
-    #data_output_location = save_location + data_name + '/' + trend_name + '/' + str(date) + '_' + str(qm) + '_' + \
-    #    str(list(beam_search_params.values())) + '_' + str(list(constraints.values())) + '_' + \
-    #        str(list(dfd_params.values())) + '_' + str(list(wcs_params.values())) + '_' + \
-    #            str(list(model_params.values())) + '.xlsx'
+    all_params = {**data_params, **beam_search_params, **dfd_params, **wcs_params, **model_params, **{'date':date}}
+    print(all_params)
 
     # result_analysis is a df
-    result_emm, general_params, considered_subgroups, distribution_params, sgs, jsmatrix = an.analysis(data_params=data_params,
+    if 'md' in beam_search_params.keys():
+        # apply md to bs        
+        an.md_analysis(data_params=data_params, model_params=model_params,beam_search_params=beam_search_params, 
+                       constraints=constraints, dfd_params=dfd_params, wcs_params=wcs_params, md_params=md_params,
+                       output_to_path=output_to_path, file_name=file_name, all_params=all_params)
+    else:
+        result_emm, general_params, considered_subgroups, distribution_params, sgs, jsmatrix = an.analysis(data_params=data_params,
                                                                                         model_params=model_params,
                                                                                         beam_search_params=beam_search_params, 
                                                                                         constraints=constraints,
                                                                                         dfd_params=dfd_params, 
-                                                                                        wcs_params=wcs_params)
-
-    #print(result_emm)
-    #print(general_params)
-    #print(considered_subgroups)
-    #print(distribution_params)
-
-    # save   
-    subgroup_numbers = result_emm.sg.unique()
-    for j in subgroup_numbers:
-        sg = result_emm.loc[result_emm.sg == j, ]
-        params = sg.iloc[2].params 
-        params.reset_index(inplace=True,names=['meting'])
-        params.to_csv(file_name + '_' + str(j) + '.txt', sep='\t', index=False)
-
-    beam_search_params.update(dfd_params)
-    beam_search_params.update(constraints)
-    beam_search_params.update(wcs_params)
-    beam_search_params.update(model_params)
-    beam_search_params.update({'date': date})
-    analysis_info = pd.DataFrame(beam_search_params, index=[0])
-    general_params_pd = general_params['params']
-    
-    dfs = {'result_emm': result_emm, 'analysis_info': analysis_info, 
-           'considered_subgroups': pd.DataFrame(considered_subgroups), 
-           'general_params_pd': general_params_pd, 
-           'distribution_params': pd.DataFrame(distribution_params),
-           'sgs':sgs, 'jsmatrix':jsmatrix}
-    
-    writer = pd.ExcelWriter(file_name + '.xlsx', engine='xlsxwriter')
-    for sheet_name in dfs.keys():
-        dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=True)
-    writer.close()    
+                                                                                        wcs_params=wcs_params, md_params=md_params)
+        ss.save_one_emm_result(result_emm=result_emm, general_params=general_params, considered_subgroups=considered_subgroups, 
+                               distribution_params=distribution_params, sgs=sgs, jsmatrix=jsmatrix, output_to_path=output_to_path, 
+                               file_name=file_name, all_params=all_params)
+  
 
 if __name__ == '__main__':
 
@@ -106,18 +81,46 @@ if __name__ == '__main__':
          date=19032024, 
          output_to='./data_output/')  
     '''
-
-    # with sliced data
+    '''
+    # experiments with various md approaches
     main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
-                        'remove_data':False, 'incomplete':False, 'take_slice':True}, 
-         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 20}, 
+                        'remove_data':False, 'incomplete':True, 'take_slice':False}, 
+         beam_search_params = {'b': 8, 'w': 40, 'd': 3, 'q': 10, 'md':['cca','ignore','ignore_and_allow','ignore_allow_and_both']}, 
          model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
                          'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
          constraints = {'min_size': 0.05, 'min_occassions': 1.0},
-         dfd_params = {'make': False, 'm': 100},
-         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80}, 
+         dfd_params = {'make': True, 'm': 10},
+         md_params = {'run_experiment': False},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80, 'evaluate_jsim': True}, 
          date=20032024, 
          output_to='./data_output/')
     
+    main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
+                        'remove_data':False, 'incomplete':True, 'take_slice':False}, 
+         beam_search_params = {'b': 8, 'w': 60, 'd': 3, 'q': 20, 'md':['ignore_allow_and_both']}, 
+         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 1.0},
+         dfd_params = {'make': False, 'm': 10},
+         md_params = {'run_experiment': False},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80, 'evaluate_jsim': False}, 
+         date=21032024, 
+         output_to='./data_output/')
+    '''
+    '''
+    # MD Experiment
+    main(data_params = {'data_name':'HBSC_DNSSSU', 'trend_name':'MPALC', 
+                        'remove_data':False, 'incomplete':False, 'take_slice':False}, 
+         beam_search_params = {'b': 4, 'w': 10, 'd': 1, 'q': 2}, 
+         model_params = {'trend_var': 'prev', 'hypothesis': 'data', 'value': None, 'use_se': None, 
+                         'qm': 'max', 'threshold': None, 'order': 'max', 'round': 1},
+         constraints = {'min_size': 0.05, 'min_occassions': 1.0},
+         dfd_params = {'make': False, 'm': 2},
+         wcs_params = {'gamma': 0.9, 'stop_desc_sel': 80, 'evaluate_jsim': False}, 
+         md_params = {'run_experiment': True, 'md':['cca','ignore','ignore_and_allow','ignore_allow_and_both'],
+                      'prop': [0.1], 'mech': ['mar'], 'dep_var': ['lft'], 'indep_var': ['cijferleven']},
+         date=20032024, 
+         output_to='./data_output/')
+    '''
 
     

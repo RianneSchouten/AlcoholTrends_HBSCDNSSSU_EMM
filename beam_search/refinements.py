@@ -1,39 +1,41 @@
 import numpy as np
 import itertools as it
 
-def create_starting_descriptions(dataset=None, descriptives=None, b=None):
+def create_starting_descriptions(dataset=None, descriptives=None, b=None, md_method=None):
 
-    cq_bin = refine_binary_attributes(seed=None, dataset=dataset, subgroup=None, binary_attributes=descriptives['bin_atts'])    
+    cq_bin = refine_binary_attributes(seed=None, dataset=dataset, subgroup=None, binary_attributes=descriptives['bin_atts'], md_method=md_method)    
     
     cq_bin_nom = refine_nominal_attributes(cq=cq_bin, seed=None, dataset=dataset, subgroup=None, 
-                                            nominal_attributes=descriptives['nom_atts'])
+                                            nominal_attributes=descriptives['nom_atts'], md_method=md_method)
     
     cq_bin_nom_num = refine_numerical_attributes(cq=cq_bin_nom, seed=None, dataset=dataset, subgroup=None, 
-                                                 numerical_attributes=descriptives['num_atts'], b=b)
+                                                 numerical_attributes=descriptives['num_atts'], b=b, md_method=md_method)
 
     cq_bin_nom_num_ord = refine_ordinal_attributes(cq=cq_bin_nom_num, seed=None, dataset=dataset, subgroup=None, 
-                                                   ordinal_attributes=descriptives['ord_atts'])
+                                                   ordinal_attributes=descriptives['ord_atts'], md_method=md_method)
+
+    #print(cq_bin_nom_num_ord)
 
     return cq_bin_nom_num_ord
 
-def refine_seed(seed=None, subgroup=None, descriptives=None, b=None):
+def refine_seed(seed=None, subgroup=None, descriptives=None, b=None, md_method=None):
 
     cq_bin = refine_binary_attributes(seed=seed, dataset=None, subgroup=subgroup, 
-                                      binary_attributes=descriptives['bin_atts'])
+                                      binary_attributes=descriptives['bin_atts'], md_method=md_method)
 
     cq_bin_nom = refine_nominal_attributes(cq=cq_bin, seed=seed, dataset=None, subgroup=subgroup, 
-                                           nominal_attributes=descriptives['nom_atts'])
+                                           nominal_attributes=descriptives['nom_atts'], md_method=md_method)
     
     cq_bin_nom_num = refine_numerical_attributes(cq=cq_bin_nom, seed=seed, dataset=None, subgroup=subgroup, 
-                                                 numerical_attributes=descriptives['num_atts'], b=b)
+                                                 numerical_attributes=descriptives['num_atts'], b=b, md_method=md_method)
 
     cq_bin_nom_num_ord = refine_ordinal_attributes(cq=cq_bin_nom_num, seed=seed, dataset=None, subgroup=subgroup, 
-                                                   ordinal_attributes=descriptives['ord_atts'])
+                                                   ordinal_attributes=descriptives['ord_atts'], md_method=md_method)
  
     return cq_bin_nom_num_ord
 
 def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None, 
-                                numerical_attributes=None, b=None):
+                                numerical_attributes=None, b=None, md_method=None):
 
     refined_cq = cq
 
@@ -43,9 +45,10 @@ def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None,
     if seed is None:
         for attribute in numerical_attributes:
 
-            if any(dataset[attribute].isnull()):
-                refined_cq.append({'description' : {attribute : ['NaN']}, 
-                                   'adds': {'literal_order' : (attribute, )}})
+            if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                if any(dataset[attribute].isnull()):
+                    refined_cq.append({'description' : {attribute : ['NaN']}, 
+                                       'adds': {'literal_order' : (attribute, )}})
             
             values = dataset.loc[dataset[attribute].notnull(),attribute]
             #values = dataset[attribute]
@@ -60,7 +63,13 @@ def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                 refined_cq.append({'description' : {attribute : (min_value, value)}, 
                                    'adds': {'literal_order' : (attribute,)}})
                 refined_cq.append({'description' : {attribute : (value, max_value)}, 
-                                   'adds': {'literal_order' : (attribute,)}})     
+                                   'adds': {'literal_order' : (attribute,)}})
+
+                if md_method == 'ignore_allow_and_both':
+                    refined_cq.append({'description' : {attribute : (min_value, value, 'NaN')}, 
+                                       'adds': {'literal_order' : (attribute+'NaN',)}})
+                    refined_cq.append({'description' : {attribute : (value, max_value, 'NaN')}, 
+                                   'adds': {'literal_order' : (attribute+'NaN',)}})    
 
     # refinements for existing candidate queue
     else:    
@@ -69,11 +78,12 @@ def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None,
 
         for attribute in numerical_attributes:
 
-            if any(subgroup[attribute].isnull()):
-                temp_desc = description.copy()
-                temp_desc[attribute] = ['NaN']
-                refined_cq.append({'description' : temp_desc, 
-                                   'adds': {'literal_order' : lit + (attribute,)}})
+            if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                if any(subgroup[attribute].isnull()):
+                    temp_desc = description.copy()
+                    temp_desc[attribute] = ['NaN']
+                    refined_cq.append({'description' : temp_desc, 
+                                       'adds': {'literal_order' : lit + (attribute,)}})
             
             values = subgroup.loc[subgroup[attribute].notnull(),attribute]
             
@@ -95,11 +105,19 @@ def refine_numerical_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                 temp_desc_2[attribute] = (value, max_value) # this replaces the original boundaries for this attribute
                 refined_cq.append({'description' : temp_desc_2, 
                                    'adds': {'literal_order' : lit + (attribute,)}})
+                
+                if md_method == 'ignore_allow_and_both':
+                    temp_desc[attribute] = (min_value, value, 'NaN')
+                    refined_cq.append({'description' : temp_desc, 
+                                   'adds': {'literal_order' : lit + (attribute+'NaN',)}})
+                    temp_desc_2[attribute] = (value, max_value, 'NaN')
+                    refined_cq.append({'description' : temp_desc_2, 
+                                   'adds': {'literal_order' : lit + (attribute+'NaN',)}})
 
     return  refined_cq
 
 def refine_nominal_attributes(cq=None, seed=None, dataset=None, subgroup=None, 
-                              nominal_attributes=None):
+                              nominal_attributes=None, md_method=None):
 
     refined_cq = cq
 
@@ -108,9 +126,10 @@ def refine_nominal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
 
         for attribute in nominal_attributes:
             
-            if any(dataset[attribute].isnull()):                
-                refined_cq.append({'description' : {attribute : ['NaN']}, 
-                                   'adds': {'literal_order' : (attribute,)}})
+            if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                if any(dataset[attribute].isnull()):                
+                    refined_cq.append({'description' : {attribute : ['NaN']}, 
+                                       'adds': {'literal_order' : (attribute,)}})
 
             values = dataset.loc[dataset[attribute].notnull(),attribute].unique() 
             for i in range(len(values)):
@@ -122,6 +141,14 @@ def refine_nominal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                 if attribute != 'nation1':
                     refined_cq.append({'description' : {attribute : (0.0, value)}, 
                                        'adds': {'literal_order' : (attribute,)}}) # 0.0 indicates != this nominal value
+                    
+                if md_method == 'ignore_allow_and_both':
+                    refined_cq.append({'description' : {attribute : (1.0, value, 'NaN')}, 
+                                       'adds': {'literal_order' : (attribute+'NaN',)}}) # 1.0 indicates == this nominal value
+                    if attribute != 'nation1':
+                        refined_cq.append({'description' : {attribute : (0.0, value, 'NaN')}, 
+                                       'adds': {'literal_order' : (attribute+'NaN',)}}) # 0.0 indicates != this nominal value
+
 
         return refined_cq
 
@@ -134,11 +161,12 @@ def refine_nominal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
         for attribute in nominal_attributes:
             if not attribute in list(description.keys()):
 
-                if any(subgroup[attribute].isnull()):                
-                    temp_desc = description.copy()
-                    temp_desc[attribute] = ['NaN']
-                    refined_cq.append({'description' : temp_desc, 
-                                       'adds': {'literal_order' : lit + (attribute,)}})
+                if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                    if any(subgroup[attribute].isnull()):                
+                        temp_desc = description.copy()
+                        temp_desc[attribute] = ['NaN']
+                        refined_cq.append({'description' : temp_desc, 
+                                           'adds': {'literal_order' : lit + (attribute,)}})
 
                 values = subgroup.loc[subgroup[attribute].notnull(),attribute].unique() 
                 for i in range(len(values)):
@@ -157,11 +185,20 @@ def refine_nominal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                         temp_desc_2[attribute] = tup0
                         refined_cq.append({'description' : temp_desc_2, 
                                            'adds': {'literal_order' : lit + (attribute,)}})
+                        
+                    if md_method == 'ignore_allow_and_both':
+                        temp_desc[attribute] = tup1 + ('NaN',)
+                        refined_cq.append({'description' : temp_desc, 
+                                       'adds': {'literal_order' : lit + (attribute+'NaN',)}})
+                        if attribute != 'nation1':
+                            temp_desc_2[attribute] = tup0 + ('NaN',)
+                            refined_cq.append({'description' : temp_desc_2, 
+                                           'adds': {'literal_order' : lit + (attribute+'NaN',)}})
         
         return refined_cq
 
 def refine_binary_attributes(seed=None, dataset=None, subgroup=None, 
-                             binary_attributes=None):
+                             binary_attributes=None, md_method=None):
 
     refined_cq = []
 
@@ -170,15 +207,23 @@ def refine_binary_attributes(seed=None, dataset=None, subgroup=None,
 
         for attribute in binary_attributes:
 
-            if any(dataset[attribute].isnull()):
-                refined_cq.append({'description' : {attribute : ['NaN']}, 
-                                   'adds' : {'literal_order': (attribute,)}})
+            if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+
+                if any(dataset[attribute].isnull()):
+                    refined_cq.append({'description' : {attribute : ['NaN']}, 
+                                       'adds' : {'literal_order': (attribute,)}})
             
             values = dataset.loc[dataset[attribute].notnull(),attribute].unique() 
             refined_cq.append({'description' : {attribute : [values[0]]}, 
                                'adds': {'literal_order': (attribute,)}})
             refined_cq.append({'description' : {attribute : [values[1]]}, 
                                'adds': {'literal_order': (attribute,)}})
+            
+            if md_method == 'ignore_allow_and_both':
+                refined_cq.append({'description' : {attribute : [values[0],'NaN']}, 
+                                   'adds': {'literal_order': (attribute+'NaN',)}})
+                refined_cq.append({'description' : {attribute : [values[1],'NaN']}, 
+                               'adds': {'literal_order': (attribute+'NaN',)}})
 
     # refinements for a seed
     else:
@@ -189,11 +234,12 @@ def refine_binary_attributes(seed=None, dataset=None, subgroup=None,
         for attribute in binary_attributes:
             if not attribute in list(description.keys()):
 
-                if any(subgroup[attribute].isnull()):
-                    temp_desc = description.copy()
-                    temp_desc[attribute] = ['NaN']
-                    refined_cq.append({'description' : temp_desc, 
-                                       'adds': {'literal_order' : lit + (attribute,)}})
+                if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                    if any(subgroup[attribute].isnull()):
+                        temp_desc = description.copy()
+                        temp_desc[attribute] = ['NaN']
+                        refined_cq.append({'description' : temp_desc, 
+                                           'adds': {'literal_order' : lit + (attribute,)}})
 
                 values = subgroup.loc[subgroup[attribute].notnull(),attribute].unique() 
                 for i in range(len(values)):
@@ -202,12 +248,17 @@ def refine_binary_attributes(seed=None, dataset=None, subgroup=None,
                     temp_desc = description.copy()
                     temp_desc[attribute] = [value]
                     refined_cq.append({'description' : temp_desc, 
-                                       'adds': {'literal_order' : lit + (attribute,)}})
+                                       'adds': {'literal_order' : lit + (attribute+'NaN',)}})
+                    
+                    if md_method == 'ignore_allow_and_both':
+                        temp_desc[attribute] = [value,'NaN']
+                        refined_cq.append({'description' : temp_desc, 
+                                       'adds': {'literal_order' : lit + (attribute+'NaN',)}})
 
     return  refined_cq     
 
 def refine_ordinal_attributes(cq=None, seed=None, dataset=None, subgroup=None, 
-                              ordinal_attributes=None):
+                              ordinal_attributes=None, md_method=None):
 
     refined_cq = cq
 
@@ -222,10 +273,17 @@ def refine_ordinal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                                    'adds': {'literal_order': (attribute,)}})
                 refined_cq.append({'description' : {attribute : list(cat_values[i+1:].values)}, 
                                    'adds': {'literal_order': (attribute,)}})
+                
+                if md_method == 'ignore_allow_and_both':
+                    refined_cq.append({'description' : {attribute: (list(cat_values[0:i+1].values),'NaN')}, 
+                                       'adds': {'literal_order': (attribute+'NaN',)}})
+                    refined_cq.append({'description' : {attribute: (list(cat_values[i+1:].values), 'NaN')}, 
+                                   'adds': {'literal_order': (attribute+'NaN',)}})
 
-            if any(dataset[attribute].isnull()):
-                refined_cq.append({'description' : {attribute : ['NaN']}, 
-                                   'adds': {'literal_order': (attribute,)}})               
+            if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                if any(dataset[attribute].isnull()):
+                    refined_cq.append({'description' : {attribute : ['NaN']}, 
+                                       'adds': {'literal_order': (attribute,)}})               
 
     # refinements for existing candidate queue
     else:    
@@ -236,11 +294,12 @@ def refine_ordinal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
 
             if not attribute in list(description.keys()):
 
-                if any(subgroup[attribute].isnull()):
-                    temp_desc = description.copy()
-                    temp_desc[attribute] = ['NaN']
-                    refined_cq.append({'description' : temp_desc, 
-                                       'adds': {'literal_order' : lit + (attribute,)}})
+                if md_method in ['ignore_and_allow','ignore_allow_and_both']:
+                    if any(subgroup[attribute].isnull()):
+                        temp_desc = description.copy()
+                        temp_desc[attribute] = ['NaN']
+                        refined_cq.append({'description' : temp_desc, 
+                                           'adds': {'literal_order' : lit + (attribute,)}})
 
                 #unique_values = subgroup.loc[subgroup[attribute].notnull(),attribute].unique() 
                 #cat_values = subgroup[attribute].cat.categories
@@ -258,6 +317,17 @@ def refine_ordinal_attributes(cq=None, seed=None, dataset=None, subgroup=None,
                     temp_desc_2 = description.copy()
                     temp_desc_2[attribute] = list(values_to_use[i+1:]) # this replaces the original boundaries for this attribute
                     refined_cq.append({'description' : temp_desc_2, 
-                                       'adds': {'literal_order' : lit + (attribute,)}})                
+                                       'adds': {'literal_order' : lit + (attribute,)}})    
+
+                    if md_method == 'ignore_allow_and_both':   
+                        temp_desc = description.copy()
+                        temp_desc[attribute] = (list(values_to_use[0:i+1]),) + ('NaN',)
+                        refined_cq.append({'description' : temp_desc, 
+                                       'adds': {'literal_order' : lit + (attribute+'NaN',)}})
+                        
+                        temp_desc_2 = description.copy()
+                        temp_desc_2[attribute] = (list(values_to_use[i+1:]),) + ('NaN',)
+                        refined_cq.append({'description' : temp_desc_2, 
+                                       'adds': {'literal_order' : lit + (attribute+'NaN',)}})             
 
     return  refined_cq

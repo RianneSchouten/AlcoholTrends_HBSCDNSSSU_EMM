@@ -6,3 +6,4 @@ joblib
 pyreadstat
 warnings
 xlsxwriter
+pyampute

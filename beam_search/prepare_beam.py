@@ -21,6 +21,12 @@ def collect_beam_and_candidate_result_set(candidate_result_set=None, cq_satisfie
 
         candidate_queue = []
 
+    for cand in candidate_queue:
+        if 'spijbel' in cand['description'].keys():
+            print(cand['description'])
+            print(cand['qualities']['qm_value'])
+
+
     return candidate_result_set, candidate_queue, n_redun_descs
 
 def prepare_beam_and_candidate_result_set(candidate_result_set=None, cq_satisfied=None, model_params=None, beam_search_params=None, data_size=None, wcs_params=None):

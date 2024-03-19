@@ -11,6 +11,7 @@ def preprocess(data_params=None):
     print(dataset.head())
     print(attributes)
     print(descriptives)
+    print(dataset.corr(numeric_only=True))
 
     return dataset, attributes, descriptives
 

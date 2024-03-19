@@ -8,14 +8,21 @@ import beam_search.constraints as cs
 import beam_search.prepare_beam as pb
 import beam_search.prepare_result as pr
 import beam_search.dominance_pruning as dp
+import beam_search.md_methods as mdm
 
-def beam_search(dataset=None, attributes=None, descriptives=None, model_params=None, beam_search_params=None, wcs_params=None, constraints=None):
+def beam_search(dataset=None, md_method=None, attributes=None, descriptives=None, model_params=None, beam_search_params=None, wcs_params=None, constraints=None):
+
+    if md_method is None:
+        md_method = 'ignore_and_allow'
+    print(md_method)
+    if md_method == 'cca':
+        dataset = mdm.apply_cca(dataset=dataset, descriptives=descriptives)
 
     general_params = qu.calculate_general_parameters(dataset=dataset, attributes=attributes, model_params=model_params, constraints=constraints)
     #print(len(general_params['params']))
     #print(general_params['params'])
-    candidate_queue = rf.create_starting_descriptions(dataset=dataset, descriptives=descriptives, b=beam_search_params['b'])
-    #print(candidate_queue)
+    candidate_queue = rf.create_starting_descriptions(dataset=dataset, descriptives=descriptives, b=beam_search_params['b'], md_method=md_method)
+    print(candidate_queue)
 
     candidate_result_set = []
     considered_subgroups = {}
@@ -40,9 +47,9 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
                 seed_set = []
                 seed_set.append(seed)
             else:                
-                subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=seed['description'], df=dataset, descriptives=descriptives)
+                subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=seed['description'], df=dataset, descriptives=descriptives, md_method=md_method)
                 seed_set = rf.refine_seed(seed=seed, subgroup=subgroup, descriptives=descriptives, 
-                                          b=beam_search_params['b'])
+                                          b=beam_search_params['b'], md_method=md_method)
 
             for desc in seed_set:
 
@@ -57,7 +64,7 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
                     #print('redundancy_check_description false for ', desc)
                 else:
 
-                    subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=desc['description'], df=dataset, descriptives=descriptives)
+                    subgroup, idx_sg, subgroup_compl, idx_compl = ss.select_subgroup(description=desc['description'], df=dataset, descriptives=descriptives, md_method=md_method)
                     
                     if len(idx_sg) == 0:
                         n_small_groups += 1
@@ -115,7 +122,8 @@ def beam_search(dataset=None, attributes=None, descriptives=None, model_params=N
 
     # apply dominance pruning
     result_set_pruned, n_consd, n_small_groups, n_type_small_subgroup, n_type_small_occassions, n_type_no_subgroup, n_connected_occassions = dp.apply_dominance_pruning(result_set=result_set, \
-        dataset=dataset, descriptives=descriptives, attributes=attributes, general_params=general_params, model_params=model_params, beam_search_params=beam_search_params, constraints=constraints)
+        dataset=dataset, md_method=md_method, descriptives=descriptives, attributes=attributes, general_params=general_params, \
+            model_params=model_params, beam_search_params=beam_search_params, constraints=constraints)
     # again apply description and cover based selection
     final_result_set, rs_n_redun_descs = pr.select_result_set(candidate_result_set=result_set_pruned, model_params=model_params, beam_search_params=beam_search_params, 
                                                               data_size=general_params['data_size'], wcs_params=wcs_params)

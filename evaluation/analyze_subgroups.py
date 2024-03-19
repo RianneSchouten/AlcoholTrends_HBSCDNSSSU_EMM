@@ -4,7 +4,7 @@ import pandas as pd
 import beam_search.collect_qualities as qu
 import beam_search.select_subgroup as ss
 
-def analyze_subgroups(dataset=None, attributes=None, descriptives=None, 
+def analyze_subgroups(dataset=None, md_method=None, attributes=None, descriptives=None, 
                       result_emm=None, general_params=None, 
                       subgroup_numbers=None, beam_search_params=None, model_params=None,analyze_var=None):
 
@@ -23,9 +23,11 @@ def analyze_subgroups(dataset=None, attributes=None, descriptives=None,
         sg = result_emm.loc[result_emm.sg == sgn, ]
         desc_series = sg.iloc[0,].dropna().drop(['sg'])
         desc_dict = desc_series.to_dict()
+        #print(desc_dict)
         qv_series = sg.iloc[2,]
         #lorder = eval(sg.iloc[1,].loc['literal_order'])
         lorder = sg.iloc[1,].loc['literal_order']
+        #print(lorder)
 
         description = []
         size = []
@@ -40,12 +42,14 @@ def analyze_subgroups(dataset=None, attributes=None, descriptives=None,
         i = 0
         for key in lorder:
 
+            #print(key)
+
             if key == 'dom_pruning':
                 dict_new = desc_dict
             else:
                 dict_new[key] = desc_dict[key]
 
-            subgroup, idx, subgroup_compl, idx2 = ss.select_subgroup(description=dict_new, df=dataset, descriptives=descriptives)
+            subgroup, idx, subgroup_compl, idx2 = ss.select_subgroup(description=dict_new, df=dataset, descriptives=descriptives, md_method=md_method)
             subgroup_params = qu.calculate_first_part_subgroup_parameters(subgroup=subgroup, attributes=attributes, 
                                                                       model_params=model_params, general_params=general_params)
             subgroup_params = qu.calculate_second_part_subgroup_parameters(subgroup_params=subgroup_params, subgroup=subgroup, 
