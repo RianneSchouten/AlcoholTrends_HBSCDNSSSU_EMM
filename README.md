@@ -12,7 +12,9 @@ An interactive supplement to our paper can be found at: [https://rianneschouten.
 The venv can be activated with: venv\Scripts\activate. 
 Then, main.py can be run to replicate the experiments; all contributing scripts can be found in the beam_search, evaluation and experiment folder.
 
-To ensure data privacy, we cannot provide the raw data collected by the Health Behaviour in School-Aged Children study (HBSC) and the Dutch National School Survey on Substance Use (DNSSSU). HBSC is an international study carried out in collaboration with WHO/EURO. Two of our authors, Gonneke Stevens and Saskia van Dorsselaer, are principal investigators in the Netherlands. One of our authors, Karin Monshouwer, is the principal investigator of DNSSSU, the Dutch branch of the international ESPAD study. We provide a link to our dashboard and additional material such as descriptive information, missingness percentages per category per variable per year and a slice of the complete and incomplete dataset at \url{https://github.com/RianneSchouten/AlcoholTrends_HBSCDNSSSU_EMM/}. Naturally, we are willing to respond to any requests for more information about our research design, methodology and findings (please contact corresponding author).
+To ensure data privacy, we cannot provide the raw data collected by the Health Behaviour in School-Aged Children study (HBSC) and the Dutch National School Survey on Substance Use (DNSSSU). HBSC is an international study carried out in collaboration with WHO/EURO. Two of our authors, Gonneke Stevens and Saskia van Dorsselaer, are principal investigators in the Netherlands. One of our authors, Karin Monshouwer, is the principal investigator of DNSSSU, the Dutch branch of the international ESPAD study. 
 
 A complete and an incomplete slice of the dataset can be found in the folder data_input/HBSC_DNSSSU/MPALC/. The full dataset can be made available upon request. 
+
+More information on descriptive information and missingness percentages per category per variable per year, see [this document](supplement/pdfsuppl.pdf).
 
