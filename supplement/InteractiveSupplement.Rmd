@@ -1,7 +1,7 @@
 ---
 title: "Interactive Supplement -- Analyzing the interplay between societal trends and socio-demographic variables with local pattern mining: Discovering exceptional trends in adolescent alcohol use in the Netherlands"
-author: "Author information scrubbed for double-blind reviewing"
-date: "Manuscript submitted to ADS track ECMLPKDD 2024"
+author: "Rianne M. Schouten (TU/e), Gonneke W.J.M. Stevens (UU), Saskia A.F.M. van Dorsselaer (Trimbos), Elisa L. Duinhof (Trimbos), Karin Monshouwer (Trimbos), Mykola Pechenizkiy (TU/e), and Wouter Duivesteijn (TU/e)"
+date: "Paper accepted for presentation at BNAIC/BeNeLearn 2024"
 output:
   html_document:
     css: custom.css
